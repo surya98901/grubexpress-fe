@@ -7,38 +7,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { MapPin } from "lucide-react";
 import { ChevronDown } from 'lucide-react';
 import { useDispatch } from "react-redux";
-import { setCity } from "@/store/slices/locationslice";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
 
-const LocationMenu = ({ className }: { className?: string }) => {
-  const locations = [
-    "Hyderabad",
-    "Mumbai",
-    "Bengaluru",
-    "Chennai",
-    "Delhi",
-  ];
-     const defaultCity = useSelector((state: RootState) => state.location.city);
-  const dispatch = useDispatch()
-  const handleLocationChange = (city: string)=>{
-    dispatch(setCity(city))
-  }
- 
-
-  return (
-    <DropdownMenu>
+const SortByMenu = ({className}: {className:string})=>{
+     <DropdownMenu>
       <DropdownMenuTrigger >
         <Button
           variant="ghost"
           className={`bg-white text-black hover:bg-gray-100 rounded-xl ${className}`}
         >
-          <MapPin className="h-4 w-4" />
-          {defaultCity }
+          
+          defaultCity
           <ChevronDown  className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -49,19 +29,17 @@ const LocationMenu = ({ className }: { className?: string }) => {
             Select location
           </DropdownMenuLabel>
 
-          {locations.map((loc) => (
+          {sortValues.map((val) => (
             <DropdownMenuItem
-              key={loc}
-              onClick={() => {handleLocationChange(loc)}}
+              key={val}
+              onClick={() => {handleLocationChange(val)}}
             >
               
-              {loc}
+              {val}
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
-
-export default LocationMenu;
+}
+export default SortByMenu

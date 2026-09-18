@@ -1,23 +1,28 @@
 import ResataurantContainer from "@/components/RestaurantContainer";
-import { ItemsContainer } from "@/components/ItemsContainer";
+import RestaurntContainerSlide from "@/components/RestaurantContainerSlide";
+import LocationMenu from "@/components/LocationMenu";
+import ItemsContainer from "@/components/ItemsContainer";
+
+
+
+
 const Restaurants = () => {
   return (
-    <div className="gap-5">
-        <div className="h-[20vh] p-2 w-[80vw] flex flex-col mx-50 my-5 ">
-                <h3 className="text-3xl font-bold">What's on your mind?</h3>
-                <ItemsContainer />
-              </div>
-      <div className=" p-2 w-[80vw] flex flex-col mx-50 my-5">
-        <h3 className="text-3xl font-bold">Popular Restaurants</h3>
-        <ResataurantContainer />
+    <div className="flex flex-col gap-5 items-center justify-center">
+      <ItemsContainer />
+      <div className="w-[80vw] flex justify-start mt-5">
+        <LocationMenu className="p-3 bg-green-700 text-white justify-between w-[200px] " />
       </div>
-      <div className=" p-2 w-[80vw] flex flex-col mx-50 my-5 gap-5">
-        <h3 className="text-3xl font-bold"> Restaurants in city x</h3>
-        <ResataurantContainer />
-        <ResataurantContainer />
-        <ResataurantContainer />
+      <div className=" p-2 w-[80vw] flex flex-col  my-5 gap-5">
+        <RestaurntContainerSlide />
       </div>
-
+      <div
+        id="restaurant-list"
+        className="  relative  p-2 w-[80vw] flex flex-col mx-50 my-5 gap-5"
+      >
+        <ResataurantContainer />
+        
+      </div>
     </div>
   );
 };
