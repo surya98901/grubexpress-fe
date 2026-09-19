@@ -14,25 +14,22 @@ import { useDispatch } from "react-redux";
 import { setCity } from "@/store/slices/locationslice";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
+import {citiesList} from "@/assets/utils/constants"
 
 const LocationMenu = ({ className }: { className?: string }) => {
-  const locations = [
-    "Hyderabad",
-    "Mumbai",
-    "Bengaluru",
-    "Chennai",
-    "Delhi",
-  ];
-     const defaultCity = useSelector((state: RootState) => state.location.city);
+ 
+  const defaultCity = useSelector((state: RootState) => state.location.city);
   const dispatch = useDispatch()
   const handleLocationChange = (city: string)=>{
     dispatch(setCity(city))
+                
+    document?.getElementById("restaurant-carousel")?.scrollIntoView({block:"end",behavior: "smooth" })
   }
  
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger >
+      <DropdownMenuTrigger asChild >
         <Button
           variant="ghost"
           className={`bg-white text-black hover:bg-gray-100 rounded-xl ${className}`}
@@ -49,7 +46,7 @@ const LocationMenu = ({ className }: { className?: string }) => {
             Select location
           </DropdownMenuLabel>
 
-          {locations.map((loc) => (
+          {citiesList.map((loc) => (
             <DropdownMenuItem
               key={loc}
               onClick={() => {handleLocationChange(loc)}}

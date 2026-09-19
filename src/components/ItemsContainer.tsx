@@ -52,7 +52,7 @@ const ItemsContainer = () => {
 
     <div
       id="food-carousel"
-      className="flex gap-6 overflow-x-auto scrollbar-hide px-2 pt-2 pb-4 cursor-grab active:cursor-grabbing"
+      className="flex hide-scrollbar gap-6 overflow-x-auto scrollbar-hide px-2 pt-2 pb-4 cursor-grab active:cursor-grabbing"
     >
       {list?.map((item) => (
         <motion.div

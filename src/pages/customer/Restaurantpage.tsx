@@ -4,6 +4,7 @@ import type {MenuItem} from "@/types/menu"
 import { getRestaurant} from "@/services/restaurantApi"
 import { getMenu } from "@/services/menuApi";
 import { useParams } from "react-router-dom";
+import RestaurantHeroBanner from "@/components/RestaurantHeroBanner"
 const RestaurantPage = ()=>{
     const [restaurantData, setRestautantData]= useState<Restaurant | null>(null)
     const [menuData, setMenuData] = useState<MenuItem[] | null>(null)
@@ -24,14 +25,18 @@ const RestaurantPage = ()=>{
      }, [id]);
      console.log(menuData)
     return (
-       <div className=" flex flex-col gap-5 mx-100">
-        {/*restaurent details section*/}
-         <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">welcome to  {restaurantData?.Name}</h1>
-
+       <div className=" flex flex-col gap-5 mx-auto">
+         <div className="flex flex-col items-left mt-10 mx-auto gap-4">
+            <div className="flex justify-left w-full gap-3 text-sm">
+                {["Home","/", restaurantData?.address?.city, "/", restaurantData?.Name].map((item)=>
+                 <p className={item === restaurantData?.Name ? "font-bold text-green-700 tracking-tighter" : "text-gray-500 tracking-tighter"}>{item}</p>)}
+            </div>
+            <h1 className="text-2xl font-bold tacking-tighter flex justify-start">{restaurantData?.Name}</h1>
+            <RestaurantHeroBanner data= {restaurantData}/>
         </div>
+
         {/*offers and deals section*/}
-         <div className="flex flex-col  items-center ">
+         <div className="flex flex-col  items-center mt-5">
             <h1 className="text-5xl font-bold ">deals slide</h1>
         </div>
         {/*menus*/}

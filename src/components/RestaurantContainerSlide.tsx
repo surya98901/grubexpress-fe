@@ -26,10 +26,10 @@ const RestaurntContainerSlide = () => {
     fetchRestaurants();
   }, [city]);
   return (
-    <div className="w-[80vw] mt-5  ">
+    <div >
       <div className="flex items-center justify-between mb-4 px-2">
         <div>
-          <h2 className="text-xl font-bold">Explore popular Restaurants</h2>
+          <h2 className="text-xl font-bold">Explore popular Restaurants @{city}</h2>
         </div>
 
         <div className="flex gap-2">
@@ -58,7 +58,7 @@ const RestaurntContainerSlide = () => {
       </div>
       <div
         id="restaurant-carousel"
-        className="flex gap-6 overflow-x-auto scrollbar-hide px-2 pt-2 pb-4 cursor-grab active:cursor-grabbing"
+        className="flex gap-6 hide-scrollbar overflow-x-auto scrollbar-hide px-2 pt-2 pb-4 cursor-grab active:cursor-grabbing"
       >
         {restaurants.map((restaurant) => (
           <motion.div
@@ -70,7 +70,7 @@ const RestaurntContainerSlide = () => {
           >
             <Link to={`/customer/restaurant/${restaurant._id}`}>
               {" "}
-              <RestaurantCard data={restaurant} />
+              <RestaurantCard data={restaurant}  />
             </Link>
           </motion.div>
         ))}

@@ -5,6 +5,7 @@ import {
 } from "redux-persist";
 
 import locationReducer from "./slices/locationslice";
+import serviceReducer from "./slices/serviceSlice"
 
 const storage = {
   getItem: (key: string) => {
@@ -22,19 +23,28 @@ const storage = {
   },
 };
 
-const persistConfig = {
-  key: "root",
+const locationPersistConfig = {
+  key: "location",
+  storage,
+};
+const servicePersistConfig = {
+  key: "service",
   storage,
 };
 
 const persistedLocationReducer = persistReducer(
-  persistConfig,
+  locationPersistConfig,
   locationReducer
+);
+const persistedServiceReducer = persistReducer(
+ servicePersistConfig,
+  serviceReducer
 );
 
 export const Store = configureStore({
   reducer: {
     location: persistedLocationReducer,
+    service : persistedServiceReducer,
   },
 });
 
