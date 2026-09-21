@@ -1,13 +1,38 @@
-import {BadgeIndianRupee} from 'lucide-react'
-const OffersCard = ()=>{
-    return (
-        <div className='shadow-l flex gap-3 flex-shrink-0 items-center border-3 border-green-700 w-[300px] p-1 rounded-xl '>
-            <BadgeIndianRupee size = {50} className='fill-white text-green-700 rounded-full '/>
-            <section>
-                <p className='text-black tracking-tighter font-bold text-xl '>Offer Title</p>
-                <p className='text-black tracking-tighter text-gray-500 font-bold'>Ends in xhs: y min: z sec</p>
-            </section>
-        </div>
-    )
+import { BadgeIndianRupee } from "lucide-react";
+
+interface OffersCardProps {
+  title?: string;
+  subtitle?: string;
+  className?: string;
 }
-export default OffersCard
+
+const OffersCard = ({
+  title = "Offer Title",
+  subtitle = "Ends in xh: ymin: zsec",
+  className = "",
+}: OffersCardProps) => {
+  return (
+    <div
+      className={`flex w-[300px] shrink-0 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-sm ${className}`}
+    >
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-green-50">
+        <BadgeIndianRupee
+          size={28}
+          className="text-green-700"
+        />
+      </div>
+
+      <section>
+        <p className="text-base font-bold tracking-tight text-gray-900">
+          {title}
+        </p>
+
+        <p className="text-sm font-medium text-gray-500">
+          {subtitle}
+        </p>
+      </section>
+    </div>
+  );
+};
+
+export default OffersCard;

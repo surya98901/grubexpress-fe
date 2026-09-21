@@ -28,13 +28,13 @@ const Menu = () => {
   }, [id]);
   const topRated = menuData?.filter((item)=> item.rating > 4.5);
   return (
-    <section className="px-5 ">
-      <div className="mb-5 flex items-center justify-between">
+    <section className=" w-[70vw] ">
+      <div className="mb-5 flex items-center justify-between ">
         <h2 className="text-2xl font-bold">Menu</h2>
         <span className="text-sm text-gray-500">{menuData.length} items</span>
       </div>
 
-      <Accordion defaultValue={["item-1"]}>
+      <Accordion defaultValue={["item-1"]} className="w-[90%] mx-auto shadow-md px-2 rounded-xl ">
         <AccordionItem value="item-1">
           <AccordionTrigger className=" text-2xl font-bold flex items-center gap-5">
             <h2 className="text-2xl font-bold">Top rated items for You</h2>
@@ -51,7 +51,7 @@ const Menu = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <Accordion defaultValue={["item-1"]}>
+      <Accordion defaultValue={["item-1"]} className="w-[90%] mx-auto shadow-md px-2 rounded-xl">
         <AccordionItem value="item-1">
           <AccordionTrigger className=" text-2xl font-bold flex items-center gap-5">
             <h2 className="text-2xl font-bold"> All Items</h2>

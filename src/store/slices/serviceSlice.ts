@@ -5,7 +5,7 @@ interface serviceState {
 }
 
 const initialState: serviceState = {
-  serviceType: "food-delivery",
+  serviceType: "dine-out",
 };
 
 const serviceSlice = createSlice({

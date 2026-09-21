@@ -26,13 +26,9 @@ const ResataurantContainer = () => {
 
       try {
         setLoading(true);
-
         const response = await getRestaurants({ limit, skip, city });
-
         const newRestaurants = response.data.restaurants;
-
         setRestaurants((prev) => [...prev, ...newRestaurants]);
-
         if (newRestaurants.length < limit) {
           setHasMore(false);
         }

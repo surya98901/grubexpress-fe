@@ -1,50 +1,221 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { useSelector } from "react-redux";
 import OffersCard from "./OffersCard";
+import type { RootState } from "@/store/store";
+
 const OfferContainer = () => {
+  const serviceType = useSelector(
+    (state: RootState) => state.service.serviceType
+  );
+
+  return serviceType === "dine-out"
+    ? diningContainer()
+    : deliveryContainer();
+};
+
+/* =========================
+   DINE OUT
+========================= */
+
+const diningContainer = () => {
+  const featuredRef = useRef<HTMLDivElement>(null);
+  const secondaryRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    amount: number
+  ) => {
+    ref.current?.scrollBy({
+      left: amount,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="w-[60vw] mx-auto px-5 ">
-      <div className="flex justify-between mx-auto ">
-        <div>
-          <h2 className="text-xl font-bold">Offers for You</h2>
+    <div className="mx-auto w-[60vw] space-y-5">
+
+      <h2 className="text-xl font-bold">
+        Offers for you
+      </h2>
+
+      {/* Pre-booking / Walk-in */}
+      <div className="rounded-2xl border-4 border-gray-100 p-3">
+
+        <div className="relative flex h-12 overflow-hidden rounded-full bg-gray-100">
+          <button className="z-10 flex-1 rounded-full bg-black font-semibold text-white">
+            Pre-booking offers
+          </button>
+
+          <button className="z-10 flex-1 font-semibold text-gray-800">
+            Walk-in offers
+          </button>
         </div>
-        <div className="flex gap-3">
+
+        {/* Featured offers carousel */}
+        <div className="mt-4 flex items-center gap-3">
+
           <button
-            onClick={() =>
-              document
-                .getElementById("offer-carousel")
-                ?.scrollBy({ left: -500, behavior: "smooth" })
-            }
-            className="h-9 w-9 rounded-full border flex items-center justify-center hover:bg-muted transition bg-green-700 text-white hover:text-green-700 "
+            onClick={() => scroll(featuredRef, -350)}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-lg transition hover:bg-green-700 hover:text-white"
+          >
+            ←
+          </button>
+
+          <div
+            ref={featuredRef}
+            className="hide-scrollbar flex flex-1 gap-4 overflow-x-auto scroll-smooth"
+          >
+            <OffersCard
+              title="Flat 25% Off"
+              subtitle="Available Monday–Sunday"
+            />
+
+            <OffersCard
+              title="Extra ₹200 Off"
+              subtitle="No code required"
+            />
+
+            <OffersCard
+              title="10% Cashback"
+              subtitle="On every bill payment"
+            />
+
+            <OffersCard
+              title="₹100 Cashback"
+              subtitle="Use MBKDINEUPI"
+            />
+          </div>
+
+          <button
+            onClick={() => scroll(featuredRef, 350)}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-lg transition hover:bg-green-700 hover:text-white"
+          >
+            →
+          </button>
+
+        </div>
+      </div>
+
+      {/* Smaller offers */}
+      <div className="flex items-center gap-3">
+
+        <div
+          ref={secondaryRef}
+          className="hide-scrollbar flex flex-1 gap-4 overflow-x-auto scroll-smooth"
+        >
+          <OffersCard
+            title="10% Cashback"
+            subtitle="On every bill payment"
+          />
+
+          <OffersCard
+            title="₹100 Cashback"
+            subtitle="Use MBKDINEUPI"
+          />
+
+          <OffersCard
+            title="Extra ₹200 Off"
+            subtitle="No code required"
+          />
+
+          <OffersCard
+            title="Flat 25% Off"
+            subtitle="Available Monday–Sunday"
+          />
+        </div>
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => scroll(secondaryRef, -300)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
           >
             ←
           </button>
 
           <button
-            onClick={() =>
-              document
-                .getElementById("offer-carousel")
-                ?.scrollBy({ left: 500, behavior: "smooth" })
-            }
-            className="h-9 w-9 rounded-full border flex items-center justify-center hover:bg-muted transition bg-green-700 text-white hover:text-green-700"
+            onClick={() => scroll(secondaryRef, 300)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
+          >
+            →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+/* =========================
+   DELIVERY
+========================= */
+
+const deliveryContainer = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (amount: number) => {
+    carouselRef.current?.scrollBy({
+      left: amount,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="mx-auto w-[60vw]">
+
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-bold">
+          Offers for You
+        </h2>
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => scroll(-500)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
+          >
+            ←
+          </button>
+
+          <button
+            onClick={() => scroll(500)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
           >
             →
           </button>
         </div>
       </div>
+
       <div
-        id="offer-carousel"
-        className="flex hide-scrollbar gap-6 overflow-x-auto  pt-2 pb-4 cursor-grab active:cursor-grabbing"
+        ref={carouselRef}
+        className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth"
       >
-        <OffersCard />
-        <OffersCard />
-        <OffersCard />
-        <OffersCard />
-        <OffersCard />
-        <OffersCard />
-        <OffersCard />
-        <OffersCard />
+        <OffersCard
+          title="Extra ₹200 Off"
+          subtitle="No code required"
+        />
+
+        <OffersCard
+          title="10% Cashback"
+          subtitle="On every bill payment"
+        />
+
+        <OffersCard
+          title="₹100 Cashback"
+          subtitle="Use MBKDINEUPI"
+        />
+
+        <OffersCard
+          title="Flat 25% Off"
+          subtitle="Available Monday–Sunday"
+        />
+
+        <OffersCard
+          title="Items At ₹89"
+          subtitle="On select items"
+        />
       </div>
+
     </div>
   );
 };
+
 export default OfferContainer;

@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
-import { Star, SignpostBig, Phone } from "lucide-react";
+import { Star, SquareArrowUpRight, Phone } from "lucide-react";
 import { Button } from "@base-ui/react";
 const RestaurantHeroBanner = ({ data }: { data: any }) => {
- 
   const serviceType = useSelector(
     (state: RootState) => state.service.serviceType,
   );
@@ -59,7 +58,7 @@ const foodDeliverBanner = (data: any) => {
 };
 const dininBanner = (data: any) => {
   return (
-    <div className="flex w-[60vw] gap-5 rounded-xl p-5">
+    <div className="flex w-[60vw] gap-5 rounded-xl p-5 bg-gray-100 mx-auto">
       <img
         src={data?.imageURL}
         alt=""
@@ -67,17 +66,18 @@ const dininBanner = (data: any) => {
             rounded-xl h-[40vh] w-[50%] object-center object-cover"
       />
       <div className="flex relative flex-col text-sm w-[50%] justify-left p-5  ">
-        <h1 className="text-4xl font-bold pt-2 tracking-tighter">{data.Name}</h1>
+        <h1 className="text-4xl font-bold pt-2 tracking-tighter">
+          {data?.Name}
+        </h1>
         <div className=" flex p-1 mb-2 items-center gap-2 font-bold">
           {data?.Cusine?.map((item: string) => (
-            <p className="text-green-700 tracking-tighter font-bold ">
-              {item}
-            </p>
+            <p className="text-green-700 tracking-tighter font-bold ">{item}</p>
           ))}
-          
         </div>
-        <div className="text-xl tracking-tighter flex p-1"><p>x km • {data.address.addressLine}</p></div>
-        
+        <div className="text-xl tracking-tighter flex p-1">
+          <p>x km • {data?.address?.addressLine}</p>
+        </div>
+
         <div className=" flex gap-5 p-1 items-center text-sm font-semibold ">
           <p className="flex gap-1 items-center">
             <span className="flex gap-1 bg-green-900 text-white px-2 py-1 rounded-xl">
@@ -85,33 +85,37 @@ const dininBanner = (data: any) => {
               {data?.rating}
             </span>
             xk ratings
-            
           </p>
-          <p >|{data?.avgPriceforTwo + " for two"}</p>
-        </div>        
-        <div className=" flex gap-4 px-2 mt-3 items-center  font-semibold  w-[20vw] ">
+          <p>|{data?.avgPriceforTwo + " for two"}</p>
+        </div>
+        <div className=" flex gap-1 px-2 mt-3 items-center  font-semibold  w-[20vw] ">
           <p
-            className={
-              data?.status == "open" ? `text-green-600` : `text-red-600`
-            }
+            className={`rounded-xl p-1  flex gap-1 ${
+              data?.status === "open"
+                ? "bg-green-100 text-green-600 border-1 border-green-700"
+                : "bg-red-100 text-red-600 border-1 border-red-700"
+            }`}
           >
             {data?.status}
             <span className="text-gray-500"> till {data?.closesAt}pm</span>
           </p>
-          <p className="flex items-center gap-1">
+          <p className="flex items-center gap-1 border-1 border-gray-600 px-1 bg-gray-300 rounded-xl">
             <span>
-              <SignpostBig className="w-[15px]" />{" "}
-            </span>{" "}
+              <SquareArrowUpRight className="w-[15px]" />
+            </span>
             Directions
           </p>
-          <p className="flex items-center gap-1">
+          <p className="flex items-center gap-1 border-1 border-gray-600 px-1 bg-gray-300 rounded-xl">
             <span>
               <Phone className="w-[15px]  " />
-            </span>{" "}
+            </span>
             Call
           </p>
         </div>
-        <Button className= "absolute bottom-0  w-[80%] bg-green-700 text-white rounded-xl py-3 "> login to avail offer and pay  </Button>
+        <Button className="absolute bottom-0  w-[80%] bg-green-700 text-white rounded-xl py-3 ">
+          {" "}
+          login to avail offer and pay{" "}
+        </Button>
       </div>
     </div>
   );
