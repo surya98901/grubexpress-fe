@@ -3,6 +3,7 @@ import type { RootState } from "@/store/store";
 import { Star, SignpostBig, Phone } from "lucide-react";
 import { Button } from "@base-ui/react";
 const RestaurantHeroBanner = ({ data }: { data: any }) => {
+ 
   const serviceType = useSelector(
     (state: RootState) => state.service.serviceType,
   );

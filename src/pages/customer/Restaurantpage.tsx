@@ -1,70 +1,129 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import type { Restaurant } from "@/types/restaurant";
-import type {MenuItem} from "@/types/menu"
-import { getRestaurant} from "@/services/restaurantApi"
-import { getMenu } from "@/services/menuApi";
-import { useParams } from "react-router-dom";
-import RestaurantHeroBanner from "@/components/RestaurantHeroBanner"
-const RestaurantPage = ()=>{
-    const [restaurantData, setRestautantData]= useState<Restaurant | null>(null)
-    const [menuData, setMenuData] = useState<MenuItem[] | null>(null)
-    const { id } = useParams();
-   useEffect( ()=>{
-    if(!id)return;
-       const fetchRestaurants = async () => {
-         try {
-           const response = await getRestaurant(id);
-           setRestautantData(response.data.restaurant);
-           const menudata = await getMenu(id);
-            setMenuData(menudata.data)
-         } catch (error) {
-           console.error("Error fetching restaurants:", error);
-         }
-       };
-       fetchRestaurants();
-     }, [id]);
-     console.log(menuData)
-    return (
-       <div className=" flex flex-col gap-5 mx-auto">
-         <div className="flex flex-col items-left mt-10 mx-auto gap-4">
-            <div className="flex justify-left w-full gap-3 text-sm">
-                {["Home","/", restaurantData?.address?.city, "/", restaurantData?.Name].map((item)=>
-                 <p className={item === restaurantData?.Name ? "font-bold text-green-700 tracking-tighter" : "text-gray-500 tracking-tighter"}>{item}</p>)}
-            </div>
-            <h1 className="text-2xl font-bold tacking-tighter flex justify-start">{restaurantData?.Name}</h1>
-            <RestaurantHeroBanner data= {restaurantData}/>
-        </div>
 
-        {/*offers and deals section*/}
-         <div className="flex flex-col  items-center mt-5">
-            <h1 className="text-5xl font-bold ">deals slide</h1>
+import { getRestaurant } from "@/services/restaurantApi";
+import Menu from "@/components/menu";
+import { useParams } from "react-router-dom";
+import RestaurantHeroBanner from "@/components/RestaurantHeroBanner";
+import OfferContainer from "@/components/OffersContainer";
+import RestaurntContainerSlide from "@/components/RestaurantContainerSlide";
+
+const RestaurantPage = () => {
+  const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchRestaurantData = async () => {
+      try {
+        const restaurantResponse = await getRestaurant(id);
+        setRestaurantData(restaurantResponse.data.restaurant);
+      } catch (error) {
+        console.error("Error fetching restaurant:", error);
+      }
+    };
+
+    fetchRestaurantData();
+  }, [id]);
+  console.log("restadta", restaurantData)
+
+  return (
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8">
+      <div className="flex gap-2 text-sm">
+        <span className="text-gray-500">Home</span>
+        <span>/</span>
+        <span className="text-gray-500">{restaurantData?.address?.city}</span>
+        <span>/</span>
+        <span className="font-medium text-green-700">
+          {restaurantData?.Name}
+        </span>
+      </div>
+      <section className="space-y-4">
+        <h1 className="text-3xl font-bold tracking-tight">
+          {restaurantData?.Name}
+        </h1>
+        <RestaurantHeroBanner data={restaurantData} />
+      </section>
+      <section>
+        <h2 className="mb-4 text-2xl font-bold">Offers & Deals</h2>
+        <OfferContainer />
+      </section>
+      <Menu />
+
+      <section className="border-t pt-8">
+        <h2 className="mb-5 text-2xl font-bold">You may also like</h2>
+        < RestaurntContainerSlide />
+
+      </section>
+
+      <section className="border-t pt-8">
+        <h2 className="mb-4 text-2xl font-bold">
+          About {restaurantData?.Name}
+        </h2>
+        <p className="leading-7 text-gray-600">{restaurantData?.Description}</p>
+      </section>
+
+      <section className="border-t pt-8">
+        <h2 className="mb-5 text-2xl font-bold">Restaurant Information</h2>
+        <div className="grid gap-4 rounded-xl bg-gray-50 p-5 sm:grid-cols-2">
+          <div>
+            <p className="text-sm text-gray-500">Address</p>
+            <p className="font-medium">
+              {restaurantData?.address?.addressLine},{" "}
+              {restaurantData?.address?.city}, {restaurantData?.address?.state}{" "}
+              - {restaurantData?.address?.pincode}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">FSSAI License</p>
+            <p className="font-medium">{restaurantData?.FSSAIID}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Cuisine</p>
+            <p className="font-medium">{restaurantData?.Cusine?.join(", ")}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500">Rating</p>
+            <p className="font-medium">⭐ {restaurantData?.rating}</p>
+          </div>
         </div>
-        {/*menus*/}
-        <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">accordeion for each menu type</h1>
+      </section>
+
+      <section className="border-t pt-8">
+        <h2 className="mb-5 text-2xl font-bold">Frequently Asked Questions</h2>
+        <div className="space-y-3">
+          <details className="rounded-lg border p-4">
+            <summary className="cursor-pointer font-medium">
+              Does this restaurant offer delivery?
+            </summary>
+            <p className="mt-3 text-gray-600">
+              Delivery availability depends on the restaurant and your location.
+            </p>
+          </details>
+
+          <details className="rounded-lg border p-4">
+            <summary className="cursor-pointer font-medium">
+              What cuisines are available?
+            </summary>
+            <p className="mt-3 text-gray-600">
+              {restaurantData?.Cusine?.join(", ")}
+            </p>
+          </details>
         </div>
-        {/*recommendations*/}
-        <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">related restaurents</h1>
-        </div>
-         {/*about restaurent*/}
-        <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">about restaurent </h1>
-        </div>
-         {/*faqs*/}
-        <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">faqs </h1>
-        </div>
-         {/*disclamer*/}
-        <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">disclaimer </h1>
-        </div>
-         {/*legal details*/}
-        <div className="flex flex-col  items-center ">
-            <h1 className="text-5xl font-bold ">fsaai and address </h1>
-        </div>
-        <div className="absolute right-50 bottom-50 bg-black text-white p-2 w-[50px] text-sm"> menu</div>
-       </div>
-    )
-}
-export default RestaurantPage
+      </section>
+
+      <section className="border-t pt-8 pb-10">
+        <h2 className="mb-3 text-lg font-semibold">Disclaimer</h2>
+        <p className="text-sm leading-6 text-gray-500">
+          Restaurant information, menu items, prices and availability may
+          change. Please verify the details before placing an order.
+        </p>
+      </section>
+    </div>
+  );
+};
+export default RestaurantPage;
