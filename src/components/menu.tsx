@@ -28,10 +28,10 @@ const Menu = () => {
   }, [id]);
   const topRated = menuData?.filter((item)=> item.rating > 4.5);
   return (
-    <section className=" w-[70vw] ">
-      <div className="mb-5 flex items-center justify-between ">
-        <h2 className="text-2xl font-bold">Menu</h2>
-        <span className="text-sm text-gray-500">{menuData.length} items</span>
+    <section className=" w-[60vw] mx-auto ">
+      <div className="mb-5 flex items-center justify-between  ">
+        <h2 className="text-2xl font-bold ">Menu</h2>
+        <span className="text-sm text-gray-500">({menuData.length} items)</span>
       </div>
 
       <Accordion defaultValue={["item-1"]} className="w-[90%] mx-auto shadow-md px-2 rounded-xl ">

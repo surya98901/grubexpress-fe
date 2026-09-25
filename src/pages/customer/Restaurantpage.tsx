@@ -11,29 +11,22 @@ import RestaurntContainerSlide from "@/components/RestaurantContainerSlide";
 import type { RootState } from "@/store/store";
 
 const RestaurantPage = () => {
-console.log("page rendering" )
+
   const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);
    const serviceType = useSelector(
     (state: RootState) => state.service.serviceType,
   );
   const { id } = useParams();
-   console.log("🔥 RENDER", {
-    id,
-    serviceType,
-  });
+
   useEffect(() => {
-    console.log("🔥 EFFECT", {
-      id,
-      serviceType,
-    });
-    if (!id) { console.log("returned with failure") ; return};
+  
+    if (!id) return
 
     const fetchRestaurantData = async () => {
-        console.log("executing the fetch ")
       try {
         const restaurantResponse = await getRestaurant(id);
         setRestaurantData(restaurantResponse.data.restaurant);
-         console.log("fetch success")
+     
       } catch (error) {
         console.error("Error fetching restaurant:", error);
       }
@@ -45,12 +38,10 @@ console.log("page rendering" )
 };
 const dining = (restaurantData : any)=>{
     return (
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8">
+        <div className="mx-auto flex  w-[60vw]  flex-col gap-10 px-4 py-8">
       <div className="flex gap-2 text-sm">
         <span className="text-gray-500">Home</span>
-        <span>/</span>
         <span className="text-gray-500">{restaurantData?.address?.city}</span>
-        <span>/</span>
         <span className="font-medium text-green-700">
           {restaurantData?.Name}
         </span>
@@ -62,7 +53,6 @@ const dining = (restaurantData : any)=>{
         <RestaurantHeroBanner data={restaurantData} />
       </section>
       <section>
-        <h2 className="mb-4 text-2xl font-bold">Offers & Deals</h2>
         <OfferContainer />
       </section>
       <Menu />
@@ -143,7 +133,7 @@ const dining = (restaurantData : any)=>{
 }
 const foodDel = (restaurantData : any)=>{
     return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8">
+    <div className="mx-auto flex  w-[60vw] flex-col gap-10 px-4 py-8">
       <div className="flex gap-2 text-sm">
         <span className="text-gray-500">Home</span>
         <span>/</span>

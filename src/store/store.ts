@@ -6,6 +6,7 @@ import {
 
 import locationReducer from "./slices/locationslice";
 import serviceReducer from "./slices/serviceSlice"
+import userReducer from "./slices/userSlice"
 
 const storage = {
   getItem: (key: string) => {
@@ -31,6 +32,10 @@ const servicePersistConfig = {
   key: "service",
   storage,
 };
+const userPersistConfig = {
+  key : "user",
+  storage,
+}
 
 const persistedLocationReducer = persistReducer(
   locationPersistConfig,
@@ -40,11 +45,16 @@ const persistedServiceReducer = persistReducer(
  servicePersistConfig,
   serviceReducer
 );
+const persistedUserReducer = persistReducer(
+ userPersistConfig,
+  userReducer
+);
 
 export const Store = configureStore({
   reducer: {
     location: persistedLocationReducer,
     service : persistedServiceReducer,
+    user : persistedUserReducer,
   },
 });
 

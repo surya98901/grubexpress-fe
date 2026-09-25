@@ -1,8 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import PublicLayout from "./layouts/PublicLayout";
 import CustomerLayout from "./layouts/customerLayout";
-import Signup from "./pages/Signup";
-import Signin from "./pages/Signin";
+import Auth from "./pages/AuthPage";
 import Restaurants from "./pages/customer/Restaurants";
 import Cart from "./pages/customer/Cart";
 import Home from "./pages/Home";
@@ -22,8 +21,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route element={<PublicLayout />}>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/auth" element={<Auth />} />
         <Route path="/food" element={<PartnerPage />} />
       </Route>
       <Route path="/customer" element={<CustomerLayout />}>
