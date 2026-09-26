@@ -1,10 +1,28 @@
 import { Leaf, Ham } from "lucide-react";
 import Rating from "@/components/genericUIcomponents/rating";
 import type { menuItems } from "@/types/menuItem";
+import { addUserOrderItem,removeUserOrderItem } from "@/services/userApi";
 import { useState } from "react";
 const ItemCard = ({ data }: { data: menuItems }) => {
-  const isVeg = data.type === "veg";
   const [itemSelect, setItemSelect] = useState<number>(0);
+  const addToCart = async () => {
+    try {
+      await addUserOrderItem(data._id);
+       setItemSelect(itemSelect + 1)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const removeFromCart = async () => {
+    try {
+      await removeUserOrderItem(data._id);
+      setItemSelect(Math.max(0, itemSelect - 1))
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const isVeg = data.type === "veg";
+  
 
   return (
     <div className="group flex min-h-[180px] justify-between gap-6 border-b border-gray-200 py-5">
@@ -52,14 +70,14 @@ const ItemCard = ({ data }: { data: menuItems }) => {
         {itemSelect == 0 ? (
           <button
             className="absolute -bottom-3 left-1/2 w-[110px] -translate-x-1/2 rounded-lg border border-gray-200 bg-white py-2 text-sm font-bold text-green-700 shadow-md transition-all hover:bg-green-700 hover:text-white"
-            onClick={() => setItemSelect(1)}
+            onClick={() =>  addToCart()}
           >
             ADD
           </button>
         ) : (
           <div className="absolute -bottom-3 left-1/2 flex h-10 w-[120px] -translate-x-1/2 items-center overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             <button
-              onClick={() => setItemSelect(Math.max(0, itemSelect - 1))}
+              onClick={() =>  removeFromCart()}
               className="flex h-full w-10 items-center justify-center bg-green-700 text-lg font-bold text-white transition-colors hover:bg-green-50 hover:text-green-700"
             >
               −
@@ -70,7 +88,7 @@ const ItemCard = ({ data }: { data: menuItems }) => {
             </span>
 
             <button
-              onClick={() => setItemSelect(itemSelect + 1)}
+              onClick={() =>addToCart() }
               className="flex h-full w-10 items-center justify-center bg-green-700 text-lg font-bold text-white transition-colors hover:bg-green-50 hover:text-green-700"
             >
               +

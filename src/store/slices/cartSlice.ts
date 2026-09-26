@@ -1,28 +1,82 @@
-import {createSlice, type PayloadAction} from "@reduxjs/toolkit"
-interface cartState{
-    orders: string[]
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+
+export interface CartItem {
+  menuItemId: string;
+  quantity: number;
+  subTotal: number;
 }
-const initialState: cartState = {
-    orders: []
+
+interface CartState {
+  itemsList: CartItem[];
+  restaurantId: string | null;
 }
-const cartSlice = createSlice(
-    {
-        name : "Cart",
-        initialState,
-        reducers:{
-            addOrder: (state, action:PayloadAction<string>)=>{
-                state.orders.push(action.payload);
-            },
-            removeOrder:(state, action:PayloadAction<string>)=>{
-                state.orders = state.orders.filter((item)=> item == action.payload);
-            },
-            clearCart:(state)=>{
-                state.orders = [];
-            },
-            
-        },
-    }
-);
-export const {addOrder, removeOrder, clearCart} = cartSlice.actions;
+
+const initialState: CartState = {
+  itemsList: [],
+  restaurantId: null,
+};
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState,
+
+  reducers: {
+    setCart: (
+      state,
+      action: PayloadAction<{
+        items: CartItem[];
+        restaurantId: string | null;
+      }>,
+    ) => {
+      state.itemsList = action.payload.items;
+      state.restaurantId = action.payload.restaurantId;
+    },
+
+    addItem: (state, action: PayloadAction<CartItem>) => {
+      const existingItem = state.itemsList.find(
+        (item) => item.menuItemId === action.payload.menuItemId,
+      );
+
+      if (existingItem) {
+        existingItem.quantity += action.payload.quantity;
+        existingItem.subTotal += action.payload.subTotal;
+      } else {
+        state.itemsList.push(action.payload);
+      }
+    },
+
+    removeItem: (state, action: PayloadAction<string>) => {
+      state.itemsList = state.itemsList.filter(
+        (item) => item.menuItemId !== action.payload,
+      );
+    },
+
+    updateQuantity: (
+      state,
+      action: PayloadAction<{
+        menuItemId: string;
+        quantity: number;
+        subTotal: number;
+      }>,
+    ) => {
+      const item = state.itemsList.find(
+        (item) => item.menuItemId === action.payload.menuItemId,
+      );
+
+      if (item) {
+        item.quantity = action.payload.quantity;
+        item.subTotal = action.payload.subTotal;
+      }
+    },
+
+    clearCart: (state) => {
+      state.itemsList = [];
+      state.restaurantId = null;
+    },
+  },
+});
+
+export const { setCart, addItem, removeItem, updateQuantity, clearCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

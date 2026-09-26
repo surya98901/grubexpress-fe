@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { FoodItems } from "@/types/items"
 import { getdisplayItems } from "@/services/itemslist";
+
 import { motion } from "framer-motion";
 const ItemsContainer = () => {
   const [list, setList] = useState< FoodItems[]|null>(null);
@@ -15,6 +16,7 @@ const ItemsContainer = () => {
     };
     fetchItemslist()
   },[])
+
     return (
   <div className="w-[80vw] mt-5  ">
     <div className="flex items-center justify-between mb-4 px-2">

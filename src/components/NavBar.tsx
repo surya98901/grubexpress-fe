@@ -1,15 +1,26 @@
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { Link } from "react-router-dom";
 import {userAuthSignout} from "@/services/authApi"
 import { getUserDetails } from "@/services/userApi";
 import { setUser, removeUser } from "@/store/slices/userSlice";
-import type { RootState } from "@/store/store";
+import { getUserCart } from "@/services/userApi";
 const NavBar = () => {
   const dispatch = useDispatch()
-  const userName = useSelector((state:RootState)=> state.user.userName)
+  const [userName ,setUseName] = useState<string>("")
+    const [cartlength, setCartLength] = useState<number>(0);
 
+    const fetchCartDetails = async () => {
+      try {
+        const response = await getUserCart();
+        const cartDetails = response.data.data.items;
+  
+        setCartLength(cartDetails.length);
+      } catch (err) {
+        console.log(err);
+      }
+    };
   const signOutHandler = ()=>{
     const signOut = async ()=>{
       try{
@@ -26,13 +37,15 @@ const NavBar = () => {
     const fetchUserDetails = async ()=>{
       try{
         const response = await getUserDetails();
-
-      dispatch(setUser(response?.data?.userData?.userName))
+        
+        setUseName(response?.data?.userData?.userName);
+      dispatch(setUser(userName))
       }catch(err){
         console.log(err)
       }
     };
     fetchUserDetails();
+    fetchCartDetails();
   }, []);
 
 
@@ -57,7 +70,8 @@ const NavBar = () => {
               <Link to="/customer/restaurants">Restaurants</Link>
             </li>
             <li>
-              <Link to="/customer/cart">Cart</Link>
+              <Link to="/customer/cart">Cart : {cartlength}</Link>
+              <section></section>
             </li>
             <li>
               <Link to="/customer/orders">Orders</Link>
