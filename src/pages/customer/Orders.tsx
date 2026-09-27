@@ -1,8 +1,28 @@
+import { getOrders } from "@/services/userApi"
+import { useEffect, useState } from "react"
+import OrderCards from "@/components/OrderCards"
+
+import type {OrderDetails} from "@/types/order"
 
 const Order = ()=>{
+    const [orders, setOrders] = useState<OrderDetails[] | null>(null)
+    useEffect(()=>{
+        const fetchOrders = async ()=>{
+            try{
+                const response = await getOrders();
+                setOrders(response.data.data)
+            }catch(err){
+                console.log(err);
+            }
+        }
+        fetchOrders()
+    }, [])
+
     return (
         <div>
-        Order page
+            <section>
+                {orders?.map((item)=> <OrderCards key= {item._id} data = {item}/>)}
+            </section>
         </div>
     )
 }

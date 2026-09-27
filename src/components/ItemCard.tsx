@@ -1,28 +1,38 @@
 import { Leaf, Ham } from "lucide-react";
 import Rating from "@/components/genericUIcomponents/rating";
 import type { menuItems } from "@/types/menuItem";
-import { addUserOrderItem,removeUserOrderItem } from "@/services/userApi";
-import { useState } from "react";
+import { addUserOrderItem, removeUserOrderItem } from "@/services/userApi";
+import { setCart } from "@/store/slices/cartSlice";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "@/store/store";
+
 const ItemCard = ({ data }: { data: menuItems }) => {
-  const [itemSelect, setItemSelect] = useState<number>(0);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  const cartItem = cartItems.find((item) => item.menuItemId === data._id);
+
+  const quantity = cartItem?.quantity ?? 0;
   const addToCart = async () => {
     try {
-      await addUserOrderItem(data._id);
-       setItemSelect(itemSelect + 1)
+      const response = await addUserOrderItem(data._id);
+
+      dispatch(setCart(response.data.data));
     } catch (err) {
       console.log(err);
     }
   };
+
   const removeFromCart = async () => {
     try {
-      await removeUserOrderItem(data._id);
-      setItemSelect(Math.max(0, itemSelect - 1))
+      const response = await removeUserOrderItem(data._id);
+
+      dispatch(setCart(response.data.data));
     } catch (err) {
       console.log(err);
     }
   };
   const isVeg = data.type === "veg";
-  
 
   return (
     <div className="group flex min-h-[180px] justify-between gap-6 border-b border-gray-200 py-5">
@@ -67,28 +77,28 @@ const ItemCard = ({ data }: { data: menuItems }) => {
           className="h-[140px] w-full rounded-xl object-cover shadow-sm transition-transform duration-300 group-hover:scale-[1.02]"
         />
 
-        {itemSelect == 0 ? (
+        {quantity == 0 ? (
           <button
             className="absolute -bottom-3 left-1/2 w-[110px] -translate-x-1/2 rounded-lg border border-gray-200 bg-white py-2 text-sm font-bold text-green-700 shadow-md transition-all hover:bg-green-700 hover:text-white"
-            onClick={() =>  addToCart()}
+            onClick={() => addToCart()}
           >
             ADD
           </button>
         ) : (
           <div className="absolute -bottom-3 left-1/2 flex h-10 w-[120px] -translate-x-1/2 items-center overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             <button
-              onClick={() =>  removeFromCart()}
+              onClick={() => removeFromCart()}
               className="flex h-full w-10 items-center justify-center bg-green-700 text-lg font-bold text-white transition-colors hover:bg-green-50 hover:text-green-700"
             >
               −
             </button>
 
             <span className="flex h-full flex-1 items-center justify-center border-x border-gray-200 bg-white text-sm font-bold text-green-700">
-              {itemSelect}
+              {quantity}
             </span>
 
             <button
-              onClick={() =>addToCart() }
+              onClick={() => addToCart()}
               className="flex h-full w-10 items-center justify-center bg-green-700 text-lg font-bold text-white transition-colors hover:bg-green-50 hover:text-green-700"
             >
               +

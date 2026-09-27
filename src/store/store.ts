@@ -3,7 +3,7 @@ import {
   persistStore,
   persistReducer,
 } from "redux-persist";
-
+import cartReducer from "./slices/cartSlice"
 import locationReducer from "./slices/locationslice";
 import serviceReducer from "./slices/serviceSlice"
 import userReducer from "./slices/userSlice"
@@ -55,6 +55,7 @@ export const Store = configureStore({
     location: persistedLocationReducer,
     service : persistedServiceReducer,
     user : persistedUserReducer,
+    cart : cartReducer,
   },
 });
 

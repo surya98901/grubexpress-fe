@@ -1,11 +1,16 @@
 import { addUserOrderItem, removeUserOrderItem } from "@/services/userApi";
 import { Leaf, Ham } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setCart } from "@/store/slices/cartSlice";
 
-const CartItemCard = ({data,onCartUpdate,}: {data: any; onCartUpdate: () => void;}) => {
+const CartItemCard = ({ data }: { data: any }) => {
+  const dispatch = useDispatch();
+
   const addToCart = async () => {
     try {
-      await addUserOrderItem(data.menuItemId);
-      onCartUpdate();
+      const response = await addUserOrderItem(data.menuItemId);
+
+      dispatch(setCart(response.data.data));
     } catch (err) {
       console.log(err);
     }
@@ -13,8 +18,9 @@ const CartItemCard = ({data,onCartUpdate,}: {data: any; onCartUpdate: () => void
 
   const removeFromCart = async () => {
     try {
-      await removeUserOrderItem(data.menuItemId);
-      onCartUpdate();
+      const response = await removeUserOrderItem(data.menuItemId);
+
+      dispatch(setCart(response.data.data));
     } catch (err) {
       console.log(err);
     }
@@ -23,7 +29,7 @@ const CartItemCard = ({data,onCartUpdate,}: {data: any; onCartUpdate: () => void
   const isVeg = data.type === "veg";
 
   return (
-    <div className="group flex h-[15vh] w-[30vw] items-center justify-between border-b border-gray-200 py-5 text-black">
+    <div className="group flex h-[15vh] w-[100%] items-center justify-between border-b border-gray-200 py-5 text-black">
       <div className="flex gap-2">
         <div className="h-[100px] w-[100px] overflow-hidden rounded-full border-2 border-background shadow-md">
           <img

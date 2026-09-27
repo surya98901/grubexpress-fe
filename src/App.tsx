@@ -7,7 +7,6 @@ import Cart from "./pages/customer/Cart";
 import Home from "./pages/Home";
 import "./App.css";
 import PartnerPage from "./pages/Partner";
-import OrderDetails from "./pages/customer/OrderDetails";
 import Restaurant from "./pages/customer/Restaurantpage";
 import Orders from "./pages/customer/Orders";
 import Checkout from "./pages/customer/Checkout";
@@ -29,9 +28,8 @@ function App() {
         <Route path="/customer/restaurants" element={<Restaurants />} />
         <Route path="/customer/cart" element={<Cart />} />
         <Route path="/customer/orders" element={<Orders />} />
-        <Route path="/customer/order-details" element={<OrderDetails />} />
         <Route path="/customer/profile" element={<Profile />} />
-        <Route path="/customer/checkout" element={<Checkout />} />
+        <Route path="/customer/payments" element={<Checkout />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />

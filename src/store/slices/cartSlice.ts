@@ -1,19 +1,24 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export interface CartItem {
+interface CartItem {
   menuItemId: string;
+  title: string;
+  price: number;
   quantity: number;
   subTotal: number;
+  imageURL: string;
+  type: string;
 }
 
 interface CartState {
-  itemsList: CartItem[];
+  items: CartItem[];
   restaurantId: string | null;
+  total: number;
 }
-
 const initialState: CartState = {
-  itemsList: [],
+  items: [],
   restaurantId: null,
+  total:0
 };
 
 const cartSlice = createSlice({
@@ -26,14 +31,16 @@ const cartSlice = createSlice({
       action: PayloadAction<{
         items: CartItem[];
         restaurantId: string | null;
+        total : number
       }>,
     ) => {
-      state.itemsList = action.payload.items;
+      state.items = action.payload.items;
       state.restaurantId = action.payload.restaurantId;
+      state.total = action.payload.total
     },
 
     addItem: (state, action: PayloadAction<CartItem>) => {
-      const existingItem = state.itemsList.find(
+      const existingItem = state.items.find(
         (item) => item.menuItemId === action.payload.menuItemId,
       );
 
@@ -41,12 +48,12 @@ const cartSlice = createSlice({
         existingItem.quantity += action.payload.quantity;
         existingItem.subTotal += action.payload.subTotal;
       } else {
-        state.itemsList.push(action.payload);
+        state.items.push(action.payload);
       }
     },
 
     removeItem: (state, action: PayloadAction<string>) => {
-      state.itemsList = state.itemsList.filter(
+      state.items = state.items.filter(
         (item) => item.menuItemId !== action.payload,
       );
     },
@@ -59,19 +66,21 @@ const cartSlice = createSlice({
         subTotal: number;
       }>,
     ) => {
-      const item = state.itemsList.find(
+      const item = state.items.find(
         (item) => item.menuItemId === action.payload.menuItemId,
       );
 
       if (item) {
         item.quantity = action.payload.quantity;
         item.subTotal = action.payload.subTotal;
+        
       }
     },
 
     clearCart: (state) => {
-      state.itemsList = [];
+      state.items = [];
       state.restaurantId = null;
+      state.total = 0;
     },
   },
 });
