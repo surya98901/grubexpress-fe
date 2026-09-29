@@ -14,6 +14,7 @@ import Profile from "./pages/customer/profile";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Menu from "./pages/admin/Menu";
+import AdminHome from "./pages/admin/AdminHome";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/customer/payments" element={<Checkout />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
+      <Route path="/admin" element={<AdminHome />}/>
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/restaurant" element={<Restaurant />} />
         <Route path="/admin/menu" element={<Menu />} />

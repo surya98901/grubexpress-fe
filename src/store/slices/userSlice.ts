@@ -1,9 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 interface userState {
-    userName: any
+    userName: any,
+    role : string
 }
 const initialState: userState = {
-    userName: null
+    userName: null,
+    role : "customer"
 }
 const userSlice = createSlice({
     name: "user",
@@ -12,11 +14,15 @@ const userSlice = createSlice({
         setUser: (state, action:PayloadAction<string>)=>{
                 state.userName = action.payload;
             },
+        setRole :(state, action:PayloadAction<string>)=>{
+                state.role = action.payload;
+            },
         removeUser :  (state)=>{
                 state.userName = null;
+                state.role = ""
             },
     }
 
 })
-export const { setUser, removeUser} = userSlice.actions;
+export const { setUser, removeUser, setRole} = userSlice.actions;
 export default userSlice.reducer;

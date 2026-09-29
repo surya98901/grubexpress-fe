@@ -12,11 +12,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userAuthSignUp } from "@/services/authApi";
 import { useDispatch } from "react-redux";
-import { setUser} from "@/store/slices/userSlice"
+import { setUser, setRole } from "@/store/slices/userSlice";
 
-
-const SignUp = () => {
-  const navigate = useNavigate()
+const SignUp = ({ userType }: { userType: string }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<signUpData>({
     firstName: "",
     lastName: "",
@@ -25,25 +24,26 @@ const SignUp = () => {
     emailId: "",
     password: "",
   });
-  const [errMsg, setErrMsg] = useState<string|null>(null)
-  const dispatch = useDispatch()
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
-  const formSubmission =async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const formSubmission = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    try{
-      const response = await userAuthSignUp(formData);
+
+    try {
+      const response = await userAuthSignUp(formData, userType);
       console.log(response);
-      dispatch(setUser(response?.data?.userData.userName))
-      navigate("/")
-    }catch(error){
-      console.log(error)
+      dispatch(setUser(response?.data?.userData.userName));
+      dispatch(setRole(userType))
+      userType === "customer" ? navigate("/") : navigate("/admin");
+    } catch (error) {
+      console.log(error);
     }
   };
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev)=>({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
   return (
     <div className="flex flex-col w-full items-center justify-center bg-black p-4 h-[90vh]">
@@ -178,8 +178,10 @@ const SignUp = () => {
 
         <p className="mt-6 text-center text-xs text-zinc-500">
           already have an account?
-          <Link to="/auth?mode=signin">
-            <span className="font-medium text-zinc-300 hover:underline">signin</span>
+          <Link to={`/auth?mode=signin&role=${userType}`}>
+            <span className="font-medium text-zinc-300 hover:underline">
+              signin
+            </span>
           </Link>
         </p>
       </FieldSet>

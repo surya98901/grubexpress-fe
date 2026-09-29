@@ -9,13 +9,13 @@ import {
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { setUser } from "@/store/slices/userSlice";
+import { setUser, setRole } from "@/store/slices/userSlice";
 import type {signInData} from "@/types/AuthFormData"
 import { userAuthSignIn } from "@/services/authApi";
 import { useDispatch } from "react-redux";
 
 
-const SignIn = () => {
+const SignIn = ({userType}:{userType :string}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [formData, setFormData] = useState<signInData>(
@@ -31,10 +31,11 @@ const SignIn = () => {
   const onSubmission = async (e: React.SubmitEvent<HTMLFormElement>)=>{
     e.preventDefault();
     try{
-      const response = await userAuthSignIn(formData);
+      const response = await userAuthSignIn(formData, userType);
       console.log("signiN successful, hey " ,response);
       dispatch(setUser(response?.data?.userData?.userName))
-      navigate("/")
+      dispatch(setRole(userType))
+      userType === "customer" ? navigate("/") : navigate("/admin")
     }catch(err){
       console.log(err);
     }
@@ -43,7 +44,7 @@ const SignIn = () => {
     <div className="flex flex-col w-[100vw] items-center justify-center bg-green-700 p-4 h-[90vh]">
       <FieldSet className="w-full max-w-sm rounded-xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-2xl backdrop-blur-md">
         <FieldLegend className="mb-6 text-center text-5xl font-bold tracking-tight text-zinc-100 bg-black p-2 rounded-lg">
-          Sign In
+          {userType} Sign In
         </FieldLegend>
 
         <form onSubmit={onSubmission} className="space-y-4">
@@ -105,7 +106,7 @@ const SignIn = () => {
 
         <p className="mt-6 text-center text-xs text-zinc-500">
           Don&apos;t have an account?{" "}
-          <Link to="/auth?mode=signup">
+          <Link to={`/auth?mode=signup&role=${userType}`}>
           <p className="font-medium text-zinc-300 hover:underline">
             Create one
           </p></Link>
