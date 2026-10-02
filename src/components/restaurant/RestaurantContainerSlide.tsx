@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import type { Restaurant } from "../types/restaurant";
+import type { Restaurant } from "../../types/restaurant";
 import { useEffect, useState } from "react";
-import { getRestaurants } from "../services/restaurantApi";
+import { getRestaurants } from "../../services/restaurantApi";
 import RestaurantCard from "./RestaurantCard";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";

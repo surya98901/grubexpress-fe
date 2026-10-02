@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Footer } from "../components/Footer";
-import SideMenu from "@/components/SideMenu";
+import SideMenu from "@/components/admin/SideMenu";
 
 const AdminLayout = () => {
   return (

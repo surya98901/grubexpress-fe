@@ -7,14 +7,6 @@ import type { RootState } from "@/store/store";
 import { setUser, removeUser } from "@/store/slices/userSlice";
 import { setCart, clearCart } from "@/store/slices/cartSlice";
 import {
-  LayoutDashboard,
-  Store,
-  ShoppingBag,
-  Users,
-  Settings,
-  LogOut,
-  Menu,
-  ChevronLeft,
   Bell,
   UserRound,
 } from "lucide-react";

@@ -3,11 +3,11 @@ import type { Restaurant } from "@/types/restaurant";
 
 import { getRestaurant } from "@/services/restaurantApi";
 import { useSelector } from "react-redux";
-import Menu from "@/components/menu";
+import Menu from "@/components/customer/menu";
 import { useParams } from "react-router-dom";
-import RestaurantHeroBanner from "@/components/RestaurantHeroBanner";
-import OfferContainer from "@/components/OffersContainer";
-import RestaurntContainerSlide from "@/components/RestaurantContainerSlide";
+import RestaurantHeroBanner from "@/components/restaurant/RestaurantHeroBanner";
+import OfferContainer from "@/components/offers/OffersContainer";
+import RestaurntContainerSlide from "@/components/restaurant/RestaurantContainerSlide";
 import type { RootState } from "@/store/store";
 
 const RestaurantPage = () => {

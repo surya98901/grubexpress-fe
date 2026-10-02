@@ -8,7 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import type { Restaurant } from "@/types/restaurant";
 import type { PaymentDetails } from "@/types/payment";
-import Draw from "@/components/OrderDetailsDraw";
+import Draw from "@/components/orders/OrderDetailsDraw";
 import { useNavigate } from "react-router-dom";
 import { getRestaurant } from "@/services/restaurantApi";
 import { getPayment } from "@/services/userApi";

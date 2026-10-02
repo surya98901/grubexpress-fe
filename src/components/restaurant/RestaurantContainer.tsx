@@ -1,8 +1,8 @@
-import { getRestaurants } from "../services/restaurantApi";
+import { getRestaurants } from "../../services/restaurantApi";
 import { useEffect, useState } from "react";
 import RestaurantCard from "./RestaurantCard";
 import { Link } from "react-router-dom";
-import type { Restaurant } from "../types/restaurant";
+import type { Restaurant } from "../../types/restaurant";
 import type { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";

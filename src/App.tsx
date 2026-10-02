@@ -12,9 +12,12 @@ import Orders from "./pages/customer/Orders";
 import Checkout from "./pages/customer/Checkout";
 import Profile from "./pages/customer/profile";
 import AdminLayout from "./layouts/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
+import AdminDetailDisplay from "./pages/admin/AdminDetailDisplay";
 import Menu from "./pages/admin/Menu";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminRestaurant from "./pages/admin/AdminRestaurant";
+import AdminItems from "./pages/admin/AdminItems";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 function App() {
   return (
@@ -34,10 +37,11 @@ function App() {
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
       <Route path="/admin" element={<AdminHome />}/>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/restaurant" element={<Restaurant />} />
+        <Route path="/admin/services" element={<AdminDetailDisplay />} />
+        <Route path="/admin/restaurant" element={<AdminRestaurant />} />
         <Route path="/admin/menu" element={<Menu />} />
-        <Route path="/admin/orders" element={<Orders />} />
+        <Route path= "/admin/items" element={<AdminItems/>}/>
+        <Route path= "/admin/settings" element={<AdminSettings/>}/>
         <Route path="/admin/profile" element={<Profile />} />
      
       </Route>

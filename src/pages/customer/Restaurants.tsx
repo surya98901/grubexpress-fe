@@ -1,7 +1,7 @@
-import ResataurantContainer from "@/components/RestaurantContainer";
-import RestaurntContainerSlide from "@/components/RestaurantContainerSlide";
-import LocationMenu from "@/components/LocationMenu";
-import ItemsContainer from "@/components/ItemsContainer";
+import ResataurantContainer from "@/components/restaurant/RestaurantContainer";
+import RestaurntContainerSlide from "@/components/restaurant/RestaurantContainerSlide";
+import LocationMenu from "@/components/customer/LocationMenu";
+import ItemsContainer from "@/components/customer/ItemsContainer";
 import type { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 

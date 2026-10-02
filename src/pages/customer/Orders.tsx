@@ -1,6 +1,6 @@
 import { getOrders } from "@/services/userApi"
 import { useEffect, useState } from "react"
-import OrderCards from "@/components/OrderCards"
+import OrderCards from "@/components/orders/OrderCards"
 
 import type {OrderDetails} from "@/types/order"
 

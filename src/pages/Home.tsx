@@ -1,10 +1,10 @@
 import NavBar from "../components/NavBar";
-import LocationMenu from "../components/LocationMenu";
+import LocationMenu from "../components/customer/LocationMenu";
 import CardOpt1 from "../components/CardOpt1";
 import { Footer } from "@/components/Footer";
-import ItemsContainer from "@/components/ItemsContainer";
-import ResataurantContainer from "@/components/RestaurantContainer";
-import RestaurntContainerSlide from "@/components/RestaurantContainerSlide"
+import ItemsContainer from "@/components/customer/ItemsContainer";
+import ResataurantContainer from "@/components/restaurant/RestaurantContainer";
+import RestaurntContainerSlide from "@/components/restaurant/RestaurantContainerSlide"
 import { citiesList } from "@/assets/utils/constants";
 import { homeCardData } from "@/assets/utils/constants";
 import { setCity } from "@/store/slices/locationslice";

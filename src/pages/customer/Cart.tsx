@@ -1,4 +1,4 @@
-import CartItemCard from "@/components/CartItemCard";
+import CartItemCard from "@/components/customer/CartItemCard";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { Link } from "react-router-dom";
