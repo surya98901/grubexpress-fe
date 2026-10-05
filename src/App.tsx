@@ -13,11 +13,12 @@ import Checkout from "./pages/customer/Checkout";
 import Profile from "./pages/customer/profile";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDetailDisplay from "./pages/admin/AdminDetailDisplay";
-import Menu from "./pages/admin/Menu";
-import AdminHome from "./pages/admin/AdminHome";
+import AdminMenu from "./pages/admin/AdminMenu";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminRestaurant from "./pages/admin/AdminRestaurant";
-import AdminItems from "./pages/admin/AdminItems";
+import AdminItem from "@/pages/admin/AdminItems";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminHome from "./pages/admin/AdminHome";
 
 function App() {
   return (
@@ -36,14 +37,15 @@ function App() {
         <Route path="/customer/payments" element={<Checkout />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
-      <Route path="/admin" element={<AdminHome />}/>
+      <Route path="/admin" element={<AdminHome />} />
+        <Route path="/admin/home" element={<AdminHome />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/services" element={<AdminDetailDisplay />} />
         <Route path="/admin/restaurant" element={<AdminRestaurant />} />
-        <Route path="/admin/menu" element={<Menu />} />
-        <Route path= "/admin/items" element={<AdminItems/>}/>
-        <Route path= "/admin/settings" element={<AdminSettings/>}/>
+        <Route path="/admin/menu" element={<AdminMenu />} />
+        <Route path="/admin/menu/items" element={<AdminItem />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
         <Route path="/admin/profile" element={<Profile />} />
-     
       </Route>
     </Routes>
   );

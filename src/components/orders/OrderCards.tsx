@@ -77,11 +77,8 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
           />
 
           <div className="flex flex-col w-full p-2">
-
-            {/* Order header */}
             <section className="flex gap-3 justify-between py-2">
 
-              {/* Restaurant / order information */}
               <ul>
                 <li>{restaurantData?.Name}</li>
 
@@ -98,11 +95,7 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
                   resData={restaurantData}
                 />
               </ul>
-
-              {/* Status / payment */}
               <ul>
-
-                {/* Order status */}
                 <li
                   className={
                     data.orderStatus !== "CANCELLED"
@@ -142,14 +135,14 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
               </ul>
             </section>
 
-            {/* Accordion trigger */}
+
             <AccordionTrigger className="font-bold flex items-center gap-5 underline text-green-700 text-xl">
               Items List (₹{data.totalAmount})
             </AccordionTrigger>
           </div>
         </div>
 
-        {/* Order items */}
+
         <AccordionContent>
           <div className="flex flex-col gap-5">
 

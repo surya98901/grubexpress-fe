@@ -16,7 +16,7 @@ import { setServiceType } from "@/store/slices/serviceSlice";
 const menuItems = [
   {
     label: "Dashboard",
-    path: "/admin",
+    path: "/admin/dashboard",
     icon: LayoutDashboard,
   },
   {

@@ -1,16 +1,16 @@
 
 interface List {
-    image: "...",
-    title: "Chicken Biryani",
-    time: "12 mins",
-    value: "₹240",
+    image: string,
+    title: string,
+    time: string,
+    value: string,
   }
 
-const AdminlistCard = ({ list }: { list : any} ) => {
+const AdminlistCard = ({ list }: { list : List} ) => {
   return (
     <div className="flex gap-2 w-[100%] h-[10vh] bg-white text-black rounded-xl items-center px-5 justify-between">
       <div className="flex  ">
-        <img src="" alt="item" className="w-[10vh]" />
+        <img src={list.image} alt="item" className="w-[10vh]" />
         <section>
           <span className="text-sm">{list.title}</span>
           <p className="text-sm text-gray-500"> {list.time}</p>

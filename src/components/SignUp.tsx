@@ -9,13 +9,11 @@ import {
 import { Input } from "@/components/ui/input";
 import type { signUpData } from "@/types/AuthFormData";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { userAuthSignUp } from "@/services/authApi";
-import { useDispatch } from "react-redux";
-import { setUser, setRole } from "@/store/slices/userSlice";
+import { Link } from "react-router-dom";
+import useSignUp from "@/hooks/use-signUp";
+import { signUpFormValidation } from "@/assets/utils/helpers";
 
 const SignUp = ({ userType }: { userType: string }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState<signUpData>({
     firstName: "",
     lastName: "",
@@ -24,20 +22,23 @@ const SignUp = ({ userType }: { userType: string }) => {
     emailId: "",
     password: "",
   });
-  const [errMsg, setErrMsg] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const [error, setError] = useState<string | null>(null);
+  const signUp = useSignUp(formData, userType);
 
-  const formSubmission = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const onSubmission = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+    const validationError = signUpFormValidation({
+      ...formData,
+    });
 
-    try {
-      const response = await userAuthSignUp(formData, userType);
-      console.log(response);
-      dispatch(setUser(response?.data?.userData.userName));
-      dispatch(setRole(userType))
-      userType === "customer" ? navigate("/") : navigate("/admin");
-    } catch (error) {
-      console.log(error);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    const result = await signUp();
+    if (result) {
+      setError(result);
     }
   };
 
@@ -52,7 +53,7 @@ const SignUp = ({ userType }: { userType: string }) => {
           Sign up
         </FieldLegend>
 
-        <form onSubmit={formSubmission} className="space-y-4">
+        <form onSubmit={onSubmission} className="space-y-4">
           <FieldGroup className="space-y-1">
             <section className="flex gap-2 ">
               <Field className="space-y-1">
@@ -148,13 +149,8 @@ const SignUp = ({ userType }: { userType: string }) => {
                 >
                   Password
                 </FieldLabel>
-                <a
-                  href="#"
-                  className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
-                >
-                  Forgot password?
-                </a>
               </div>
+              {error && <p className="text-red-500 text-sm">{error}</p>}
               <Input
                 id="password"
                 type="password"

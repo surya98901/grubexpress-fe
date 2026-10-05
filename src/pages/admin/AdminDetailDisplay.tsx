@@ -1,6 +1,8 @@
 import AdminTable from "@/components/admin/AdminTable";
 import { DatePicker } from "@/components/genericUIcomponents/DatePicker";
+import type { RootState } from "@/store/store";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
 const AdminDetailDisplay = () => {
@@ -18,8 +20,9 @@ const AdminDetailDisplay = () => {
       title : "Completed",
     }
   ]
+  const restaurantId = useSelector((state: RootState) => state.user.RestaurantId);
 
-  return (
+  return  restaurantId ? (
     <div className="w-[80vw] mx-auto">
       <div className="my-2 px-5 rounded-xl h-[10vh] shadow-xl flex border-1 border-t-gray-300 items-center justify-between">
         <section className=" flex items-center gap-4 px-5 ">
@@ -32,7 +35,9 @@ const AdminDetailDisplay = () => {
       <AdminTable tableType={type} tableData={[]} />
       
     </div>
-  );
+  ): ( <main>
+    <div> add your restaurant to get started</div>
+  </main>)
 };
 
 export default AdminDetailDisplay;

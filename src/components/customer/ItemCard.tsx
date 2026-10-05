@@ -6,12 +6,11 @@ import { setCart } from "@/store/slices/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/store/store";
 
+
 const ItemCard = ({ data }: { data: menuItems }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
-
   const cartItem = cartItems.find((item) => item.menuItemId === data._id);
-
   const quantity = cartItem?.quantity ?? 0;
   const addToCart = async () => {
     try {

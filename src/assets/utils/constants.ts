@@ -1,4 +1,4 @@
-
+import { ClipboardList, Utensils } from "lucide-react";
 export const citiesList = [
     "Hyderabad",
     "Mumbai",
@@ -20,3 +20,15 @@ export const citiesList = [
       val: "dine-out",
     },
   ];
+export const orderTable = {
+  title: "Order",
+  tagLine : "Manage and track customer orders",
+  rows : ["Items", "Quantity", "Price", "Date", "Status"],
+  icon : ClipboardList,
+}
+export const reservationTable = {
+  title: "Reservation",
+  tagLine : "Manage and track reservations",
+  rows : ["Name","Table", "Head count", "Time", "Date", "Status"],
+  icon : Utensils ,
+}

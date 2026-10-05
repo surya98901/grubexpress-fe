@@ -50,6 +50,7 @@ const persistedUserReducer = persistReducer(
   userReducer
 );
 
+
 export const Store = configureStore({
   reducer: {
     location: persistedLocationReducer,

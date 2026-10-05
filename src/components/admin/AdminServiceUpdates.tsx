@@ -7,7 +7,6 @@ import {
   CalendarCheck,
   ClipboardList,
   Clock3,
-  EllipsisVertical,
   Sparkles,
   Table2,
   Utensils,

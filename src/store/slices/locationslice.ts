@@ -15,9 +15,12 @@ const locationSlice = createSlice({
     setCity: (state, action: PayloadAction<string>) => {
       state.city = action.payload;
     },
+    removeCity: (state) => {
+      state.city = "";
+    }
   },
 });
 
-export const { setCity } = locationSlice.actions;
+export const { setCity, removeCity } = locationSlice.actions;
 
 export default locationSlice.reducer;

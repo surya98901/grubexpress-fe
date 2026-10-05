@@ -8,38 +8,36 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { setUser, setRole } from "@/store/slices/userSlice";
-import type {signInData} from "@/types/AuthFormData"
-import { userAuthSignIn } from "@/services/authApi";
-import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import type { signInData } from "@/types/AuthFormData";
+import useSignIn from "@/hooks/use-signIn";
 
 
-const SignIn = ({userType}:{userType :string}) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState<signInData>(
-    {
-      emailId : "",
-      password : ""
-    })
-  const handleInput = (e : React.ChangeEvent<HTMLInputElement>)=>{
-    const {name, value} = e.target;
-    setFormData((prev)=> ({...prev, [name] : value}));
+const SignIn = ({ userType }: { userType: string }) => {
+  const [formData, setFormData] = useState<signInData>({
+    emailId: "",
+    password: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const signIn = useSignIn(formData, userType);
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-  }
-  const onSubmission = async (e: React.SubmitEvent<HTMLFormElement>)=>{
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  const onSubmission = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try{
-      const response = await userAuthSignIn(formData, userType);
-      console.log("signiN successful, hey " ,response);
-      dispatch(setUser(response?.data?.userData?.userName))
-      dispatch(setRole(userType))
-      userType === "customer" ? navigate("/") : navigate("/admin")
-    }catch(err){
-      console.log(err);
+    setError(null);
+    if (!formData.emailId || !formData.password) {
+      setError("Email and password are required");
+      return;
     }
-  }
+    const result = await signIn();
+    if (result) {
+      setError(result);
+    }
+    
+  };
   return (
     <div className="flex flex-col w-[100vw] items-center justify-center bg-green-700 p-4 h-[90vh]">
       <FieldSet className="w-full max-w-sm rounded-xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-2xl backdrop-blur-md">
@@ -65,7 +63,7 @@ const SignIn = ({userType}:{userType :string}) => {
                 name="emailId"
                 value={formData.emailId}
                 onChange={handleInput}
-                />
+              />
             </Field>
 
             <Field className="space-y-1.5">
@@ -92,10 +90,10 @@ const SignIn = ({userType}:{userType :string}) => {
                 name="password"
                 value={formData.password}
                 onChange={handleInput}
-                />
+              />
             </Field>
           </FieldGroup>
-
+          {error && <p className="text-red-500 text-sm">{error}</p>}
           <Button
             type="submit"
             className="w-full mt-2 bg-zinc-100 font-medium text-zinc-900 hover:bg-zinc-200 transition-colors"
@@ -107,13 +105,13 @@ const SignIn = ({userType}:{userType :string}) => {
         <p className="mt-6 text-center text-xs text-zinc-500">
           Don&apos;t have an account?{" "}
           <Link to={`/auth?mode=signup&role=${userType}`}>
-          <p className="font-medium text-zinc-300 hover:underline">
-            Create one
-          </p></Link>
-          
+            <p className="font-medium text-zinc-300 hover:underline">
+              Create one
+            </p>
+          </Link>
         </p>
       </FieldSet>
     </div>
   );
 };
-export default SignIn
+export default SignIn;

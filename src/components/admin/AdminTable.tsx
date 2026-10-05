@@ -7,22 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ClipboardList, Utensils, EllipsisVertical   } from "lucide-react";
+import { EllipsisVertical   } from "lucide-react";
+import { orderTable, reservationTable } from "@/assets/utils/constants";
 
-const orderTable = {
-  title: "Order",
-  tagLine : "Manage and track customer orders",
-  rows : ["Items", "Quantity", "Price", "Date", "Status"],
-  icon : ClipboardList,
-}
-const reservationTable = {
-  title: "Reservation",
-  tagLine : "Manage and track reservations",
-  rows : ["Name","Table", "Head count", "Time", "Date", "Status"],
-  icon : Utensils ,
-}
-
-const AdminTable = ({tableType, tableData}:{tableType:string | null, tableData : any})=>{
+const AdminTable = ({tableType, tableData}:{tableType:string | null, tableData : any[]})=>{
   const tableDetails = tableType === "orders" ? orderTable : reservationTable  
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -53,7 +41,7 @@ const AdminTable = ({tableType, tableData}:{tableType:string | null, tableData :
           <TableBody>
             <TableRow>
               <TableCell className="w-[150px]">item._id</TableCell>
-               {tableDetails.rows.map((item)=> <TableCell className={`${item === "Status" ? "text-green-500" :"w-[50px]"}`}>{item}</TableCell>)}
+               {tableData.map((item)=> <TableCell className={`${item === "Status" ? "text-green-500" :"w-[50px]"}`}>{item}</TableCell>)}
               <TableCell >< EllipsisVertical className="w-5 h-5 "/></TableCell>
             </TableRow>
           </TableBody>

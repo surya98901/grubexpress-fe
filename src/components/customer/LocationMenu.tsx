@@ -29,7 +29,7 @@ const LocationMenu = ({ className }: { className?: string }) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild >
+      <DropdownMenuTrigger >
         <Button
           variant="ghost"
           className={`bg-white text-black hover:bg-gray-100 rounded-xl ${className}`}

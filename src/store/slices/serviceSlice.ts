@@ -5,7 +5,7 @@ interface serviceState {
 }
 
 const initialState: serviceState = {
-  serviceType: "dine-out",
+  serviceType: "food-delivery",
 };
 
 const serviceSlice = createSlice({
@@ -15,9 +15,12 @@ const serviceSlice = createSlice({
     setServiceType: (state, action: PayloadAction<string>) => {
       state.serviceType = action.payload;
     },
+    removeServiceType: (state) => {
+      state.serviceType = "food-delivery";
+    }
   },
 });
 
-export const { setServiceType } = serviceSlice.actions;
+export const { setServiceType, removeServiceType } = serviceSlice.actions;
 
 export default serviceSlice.reducer;
