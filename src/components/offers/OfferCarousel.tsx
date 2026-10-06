@@ -1,27 +1,19 @@
-import { useRef } from "react";
+
 import OffersCard from "./OffersCard";
-
+import {carouselScroll} from "@/assets/utils/helpers"
 const OffersCarousel = () => {
-  const carouselRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (amount: number) => {
-    carouselRef.current?.scrollBy({
-      left: amount,
-      behavior: "smooth",
-    });
-  };
 
   return (
     <div className="flex items-center gap-3">
       <button
-        onClick={() => scroll(-350)}
+        onClick={() => carouselScroll("left","offer-carousel" )}
         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xl transition hover:bg-green-700 hover:text-white"
       >
         ←
       </button>
 
       <div
-        ref={carouselRef}
+        id="offer-carousel"
         className="hide-scrollbar flex gap-4 overflow-x-auto scroll-smooth"
       >
         <OffersCard
@@ -46,7 +38,7 @@ const OffersCarousel = () => {
       </div>
 
       <button
-        onClick={() => scroll(350)}
+        onClick={() => carouselScroll("right","offer-carousel" )}
         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xl transition hover:bg-green-700 hover:text-white"
       >
         →

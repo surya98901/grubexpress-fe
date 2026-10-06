@@ -3,12 +3,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from 'lucide-react';
-import { useDispatch } from "react-redux";
+
 
 const SortByMenu = ({className}: {className:string})=>{
      <DropdownMenu>
@@ -29,7 +28,7 @@ const SortByMenu = ({className}: {className:string})=>{
             Select location
           </DropdownMenuLabel>
 
-          {sortValues.map((val) => (
+          {/* sortValues.map((val) => (
             <DropdownMenuItem
               key={val}
               onClick={() => {handleLocationChange(val)}}
@@ -37,7 +36,7 @@ const SortByMenu = ({className}: {className:string})=>{
               
               {val}
             </DropdownMenuItem>
-          ))}
+          )) */}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

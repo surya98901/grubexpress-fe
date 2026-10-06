@@ -3,8 +3,13 @@ import Rating from "@/components/genericUIcomponents/rating";
 import type { menuItems } from "@/types/menuItem";
 import ItemEditDraw from "./ItemsEditDraw";
 
-const AdminItemCard = ({ data }: { data: menuItems }) => {
-
+const AdminItemCard = ({
+  data,
+  onItemUpdated,
+}: {
+  data: menuItems;
+  onItemUpdated: () => void;
+}) => {
   const isVeg = data.type === "veg";
   return (
     <div className="group flex min-h-[180px] justify-between gap-6 border-b border-gray-200 py-5">
@@ -49,12 +54,8 @@ const AdminItemCard = ({ data }: { data: menuItems }) => {
           className="h-[140px] w-full rounded-xl object-cover shadow-sm transition-transform duration-300 group-hover:scale-[1.02]"
         />
 
-        <button
-          className="absolute -bottom-3 left-1/2 w-[110px] -translate-x-1/2 rounded-lg border border-gray-200 bg-white py-2 text-sm font-bold text-green-700 shadow-md transition-all hover:bg-green-700 hover:text-white"
-        >
-          <ItemEditDraw
-            data={data}
-          />
+        <button className="absolute -bottom-3 left-1/2 w-[110px] -translate-x-1/2 rounded-lg border border-gray-200 bg-white py-2 text-sm font-bold text-green-700 shadow-md transition-all hover:bg-green-700 hover:text-white">
+          <ItemEditDraw data={data} onItemUpdated={onItemUpdated} />
         </button>
       </div>
     </div>

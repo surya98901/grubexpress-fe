@@ -34,7 +34,8 @@ function App() {
         <Route path="/customer/cart" element={<Cart />} />
         <Route path="/customer/orders" element={<Orders />} />
         <Route path="/customer/profile" element={<Profile />} />
-        <Route path="/customer/payments" element={<Checkout />} />
+        <Route path="/customer/checkout" element={<Checkout />} />
+        <Route path="/customer/secure/payments" element={<div> payment gateway secure %%</div>} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
       <Route path="/admin" element={<AdminHome />} />

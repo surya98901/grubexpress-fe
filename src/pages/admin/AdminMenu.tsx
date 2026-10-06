@@ -13,26 +13,24 @@ import { useNavigate } from "react-router-dom";
 import AdminItemCard from "@/components/admin/AdminItemCards";
 
 const AdminMenu = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const restaurantId = useSelector(
     (state: RootState) => state.user.RestaurantId,
   );
+  const fetchMenu = async () => {
+    try {
+      const response = restaurantId ? await getMenu(restaurantId) : null;
+      setMenu(response?.data.data || []);
+    } catch (err) {
+      console.error("Error fetching menu:", err);
+    }
+  };
   const [menuData, setMenu] = useState<menuItems[]>([]);
   useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        const response = restaurantId ? await getMenu(restaurantId) : null;
-        setMenu(response?.data.data || []);
-      } catch (err) {
-        console.error("Error fetching menu:", err);
-      }
-    };
-
     if (restaurantId) {
       fetchMenu();
     }
   }, [restaurantId]);
-  console.log("Menu data:", menuData);
   return restaurantId ? (
     <section className=" w-[60vw] mx-auto ">
       <div className="mb-5 flex items-center justify-between my-5  ">
@@ -42,7 +40,10 @@ const AdminMenu = () => {
             ({menuData.length} items)
           </span>
         </section>
-        <button className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-600"   onClick={() => navigate(`/admin/menu/items?`)}>
+        <button
+          className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+          onClick={() => navigate(`/admin/menu/items?`)}
+        >
           Add Item
         </button>
       </div>
@@ -61,14 +62,17 @@ const AdminMenu = () => {
           <AccordionContent>
             <div className="flex flex-col">
               {menuData.map((item) => (
-                <AdminItemCard key={item._id} data={item} />
+                <AdminItemCard
+                  key={item._id}
+                  data={item}
+                  onItemUpdated={fetchMenu}
+                />
               ))}
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
     </section>
-    
   ) : (
     <main>
       <div> add your restaurant to get started</div>

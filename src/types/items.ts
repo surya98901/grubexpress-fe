@@ -3,3 +3,13 @@ export interface FoodItems {
   title: string;
   ImageURL: string;
 }
+export interface itemData {
+  title: string;
+  description: string;
+  serves: number;
+  price: number;
+  cusine: string;
+  category: string;
+  type: string;
+  available?: boolean;
+}

@@ -122,7 +122,7 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
                       disabled={timer === 0}
                       className="bg-green-700 p-1 rounded-l text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
                       onClick={() =>
-                        navigate("/customer/payments")
+                        navigate("/customer/secure/payments")
                       }
                     >
                       {timer === 0

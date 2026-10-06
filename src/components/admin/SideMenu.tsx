@@ -9,9 +9,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
-import { setServiceType } from "@/store/slices/serviceSlice";
 
 const menuItems = [
   {
@@ -44,7 +42,6 @@ const menuItems = [
 export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
-  const dispatch = useDispatch()
 
   return (
     <aside

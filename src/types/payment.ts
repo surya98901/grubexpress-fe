@@ -8,3 +8,8 @@ export interface PaymentDetails {
   paidAt?: string;
   paymentProvider?: string;
 }
+export type PaymentMethod = {
+  id: string;
+  type: string;
+  label: string;
+};

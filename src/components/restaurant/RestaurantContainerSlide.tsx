@@ -6,7 +6,7 @@ import RestaurantCard from "./RestaurantCard";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
-
+import { carouselScroll } from "@/assets/utils/helpers";
 
 const RestaurntContainerSlide = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -26,30 +26,24 @@ const RestaurntContainerSlide = () => {
     fetchRestaurants();
   }, [city]);
   return (
-    <div >
+    <div>
       <div className="flex items-center justify-between mb-4 px-2">
         <div>
-          <h2 className="text-xl font-bold">Explore popular Restaurants @{city}</h2>
+          <h2 className="text-xl font-bold">
+            Explore popular Restaurants @{city}
+          </h2>
         </div>
 
         <div className="flex gap-2">
           <button
-            onClick={() =>
-              document
-                .getElementById("restaurant-carousel")
-                ?.scrollBy({ left: -300, behavior: "smooth" })
-            }
+            onClick={() => carouselScroll("left", "restaurant-carousel")}
             className="h-9 w-9 rounded-full border flex items-center justify-center hover:bg-muted transition bg-green-700 text-white hover:text-green-700 "
           >
             ←
           </button>
 
           <button
-            onClick={() =>
-              document
-                .getElementById("restaurant-carousel")
-                ?.scrollBy({ left: 300, behavior: "smooth" })
-            }
+            onClick={() => carouselScroll("right", "restaurant-carousel")}
             className="h-9 w-9 rounded-full border flex items-center justify-center hover:bg-muted transition bg-green-700 text-white hover:text-green-700"
           >
             →
@@ -70,7 +64,7 @@ const RestaurntContainerSlide = () => {
           >
             <Link to={`/customer/restaurant/${restaurant._id}`}>
               {" "}
-              <RestaurantCard data={restaurant}  />
+              <RestaurantCard data={restaurant} />
             </Link>
           </motion.div>
         ))}

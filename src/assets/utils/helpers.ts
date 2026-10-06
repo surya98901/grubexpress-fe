@@ -32,3 +32,6 @@ export function signUpFormValidation(formData: signUpData): string | null {
 
   return null;
 }
+export const carouselScroll = (side : string, id : string) => {
+    side === "left" ? document.getElementById(id)?.scrollBy({ left: -300, behavior: "smooth" }): document.getElementById(id)?.scrollBy({ left: 300, behavior: "smooth" })
+  };

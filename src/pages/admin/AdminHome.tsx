@@ -1,4 +1,4 @@
-import { useEffect, useState, type AnyActionArg } from "react";
+import { useEffect, useState } from "react";
 import type { Restaurant } from "@/types/restaurant";
 import { getAdminRestaurents } from "@/services/adminApis";
 import { useDispatch } from "react-redux";
