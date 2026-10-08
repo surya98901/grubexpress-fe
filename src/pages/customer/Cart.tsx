@@ -1,13 +1,28 @@
 import CartItemCard from "@/components/customer/CartItemCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { Link, useNavigate } from "react-router-dom";
-import AddressCard from "@/components/customer/AddressCard";
-import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
+import {
+  AddressCard,
+  AddAddressCard,
+} from "@/components/customer/AddressCard";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ShoppingBag,
+} from "lucide-react";
 import { carouselScroll } from "@/assets/utils/helpers";
+import useGetUserAddresses from "@/hooks/use-getUserAddresses";
+
 
 const Cart = () => {
   const navigate = useNavigate();
+
+  const {
+    addressData,
+    loading: addressLoading,
+    error: addressError,
+  } = useGetUserAddresses();
 
   const { items, total, restaurantId } = useSelector(
     (state: RootState) => state.cart,
@@ -46,7 +61,10 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-100 px-6 py-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Your Cart
+          </h1>
+
           <p className="text-sm text-gray-500 mt-1">
             Review your items and choose where you'd like them delivered.
           </p>
@@ -63,7 +81,8 @@ const Cart = () => {
                   </h2>
 
                   <p className="text-sm text-gray-500 mt-1">
-                    {items.length} item{items.length !== 1 ? "s" : ""}
+                    {items.length} item
+                    {items.length !== 1 ? "s" : ""}
                   </p>
                 </div>
 
@@ -105,16 +124,24 @@ const Cart = () => {
 
             {/* BILL */}
             <div className="border-t px-6 py-5">
-              <h3 className="font-bold mb-4">Bill details</h3>
+              <h3 className="font-bold mb-4">
+                Bill details
+              </h3>
 
               <div className="flex flex-col gap-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Item total</span>
+                  <span className="text-gray-600">
+                    Item total
+                  </span>
+
                   <span>₹{total}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Delivery fee</span>
+                  <span className="text-gray-600">
+                    Delivery fee
+                  </span>
+
                   <span>₹{deliveryFee}</span>
                 </div>
 
@@ -122,11 +149,13 @@ const Cart = () => {
                   <span className="text-gray-600">
                     GST & other charges
                   </span>
+
                   <span>₹{gst}</span>
                 </div>
 
                 <div className="border-t pt-4 mt-1 flex justify-between text-base font-bold">
                   <span>To Pay</span>
+
                   <span>₹{grandTotal}</span>
                 </div>
               </div>
@@ -146,38 +175,70 @@ const Cart = () => {
             </div>
 
             <div className="px-4 py-5">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() =>
-                    carouselScroll("left", "address-carousel")
-                  }
-                  className="shrink-0 h-9 w-9 rounded-full border flex items-center justify-center hover:bg-gray-100 cursor-pointer"
-                >
-                  <ChevronLeft size={18} />
-                </button>
+              {addressLoading ? (
+                <div className="flex items-center justify-center py-10">
+                  <p className="text-sm text-gray-500">
+                    Loading addresses...
+                  </p>
+                </div>
+              ) : addressError ? (
+                <div className="flex flex-col items-center gap-3 py-10">
+                  <p className="text-sm text-red-500">
+                    {addressError}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() =>
+                      carouselScroll(
+                        "left",
+                        "address-carousel",
+                      )
+                    }
+                    className="shrink-0 h-9 w-9 rounded-full border flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
 
-                <section
-                  id="address-carousel"
-                  className="flex gap-3 overflow-x-auto w-full p-1 hide-scrollbar"
-                >
-                  <AddressCard data={null} />
-                  <AddressCard data={null} />
-                  <AddressCard data={null} />
-                  <AddressCard data={null} />
-                </section>
+                  <section
+                    id="address-carousel"
+                    className="flex gap-3 overflow-x-auto w-full p-1 hide-scrollbar"
+                  >
+                    {addressData && addressData.length > 0 ? (
+                      <>
+                        {addressData.map((item) => (
+                          <AddressCard
+                            key={item._id}
+                            data={item}
+                          />
+                        ))}
 
-                <button
-                  onClick={() =>
-                    carouselScroll("right", "address-carousel")
-                  }
-                  className="shrink-0 h-9 w-9 rounded-full border flex items-center justify-center hover:bg-gray-100 cursor-pointer"
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
+                        <AddAddressCard />
+                      </>
+                    ) : (
+                      <AddAddressCard />
+                    )}
+                  </section>
+
+                  <button
+                    onClick={() =>
+                      carouselScroll(
+                        "right",
+                        "address-carousel",
+                      )
+                    }
+                    className="shrink-0 h-9 w-9 rounded-full border flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              )}
 
               <button
-                onClick={() => navigate("/customer/checkout")}
+                onClick={() =>
+                  navigate("/customer/checkout")
+                }
                 className="mt-6 w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition cursor-pointer"
               >
                 Proceed to checkout
@@ -191,13 +252,21 @@ const Cart = () => {
             {/* MINI SUMMARY */}
             <div className="border-t bg-gray-50 px-6 py-5">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Items</span>
+                <span className="text-gray-500">
+                  Items
+                </span>
+
                 <span>{items.length}</span>
               </div>
 
               <div className="flex justify-between text-sm mt-2">
-                <span className="text-gray-500">Total</span>
-                <span className="font-bold">₹{grandTotal}</span>
+                <span className="text-gray-500">
+                  Total
+                </span>
+
+                <span className="font-bold">
+                  ₹{grandTotal}
+                </span>
               </div>
             </div>
           </div>

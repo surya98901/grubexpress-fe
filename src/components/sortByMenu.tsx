@@ -1,44 +1,31 @@
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown } from 'lucide-react';
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 
+export type SortFilter = "All" | "rating" | "costLowToHigh" | "costHighToLow";
 
-const SortByMenu = ({className}: {className:string})=>{
-     <DropdownMenu>
-      <DropdownMenuTrigger >
-        <Button
-          variant="ghost"
-          className={`bg-white text-black hover:bg-gray-100 rounded-xl ${className}`}
-        >
-          
-          defaultCity
-          <ChevronDown  className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent className="w-[200px]">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>
-            Select location
-          </DropdownMenuLabel>
-
-          {/* sortValues.map((val) => (
-            <DropdownMenuItem
-              key={val}
-              onClick={() => {handleLocationChange(val)}}
-            >
-              
-              {val}
-            </DropdownMenuItem>
-          )) */}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+interface SortByMenuProps {
+  selectFilter: SortFilter;
+  setSelectFilter: React.Dispatch<React.SetStateAction<SortFilter>>;
 }
-export default SortByMenu
+
+const SortByMenu = ({ selectFilter, setSelectFilter }: SortByMenuProps) => {
+  return (
+    <NativeSelect
+      value={selectFilter}
+      onChange={(e) => setSelectFilter(e.target.value as SortFilter)}
+    >
+      <NativeSelectOption value="All">All </NativeSelectOption>
+      <NativeSelectOption value="rating">Rating</NativeSelectOption>
+      <NativeSelectOption value="costLowToHigh">
+        Cost: Low to High
+      </NativeSelectOption>
+      <NativeSelectOption value="costHighToLow">
+        Cost: High to Low
+      </NativeSelectOption>
+    </NativeSelect>
+  );
+};
+
+export default SortByMenu;

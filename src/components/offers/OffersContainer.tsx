@@ -1,7 +1,6 @@
-import { useRef } from "react";
 import { useSelector } from "react-redux";
 import OffersCard from "./OffersCard";
-
+import { carouselScroll } from "@/assets/utils/helpers";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import type { RootState } from "@/store/store";
@@ -10,26 +9,11 @@ const OfferContainer = () => {
   const serviceType = useSelector(
     (state: RootState) => state.service.serviceType,
   );
-
-  return serviceType === "dine-out" ? diningContainer() : deliveryContainer();
+  return serviceType === "dine-out" ? <DiningContainer />: <DeliveryContainer/>;
 };
 
-
-const diningContainer = () => {
+const DiningContainer = () => {
   const [offerType, setOfferType] = useState<"prebook" | "walkin">("prebook");
-  const featuredRef = useRef<HTMLDivElement>(null);
-  const secondaryRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (
-    ref: React.RefObject<HTMLDivElement | null>,
-    amount: number,
-  ) => {
-    ref.current?.scrollBy({
-      left: amount,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <div className="mx-auto w-[60vw] space-y-5">
       <h2 className="text-xl font-bold">Offers for you</h2>
@@ -70,14 +54,14 @@ const diningContainer = () => {
         {/* Featured offers carousel */}
         <div className="mt-4 flex items-center gap-3">
           <button
-            onClick={() => scroll(featuredRef, -350)}
+            onClick={() => carouselScroll("left", "featured-Offer-carousel")}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-lg transition hover:bg-green-700 hover:text-white"
           >
             ←
           </button>
 
           <div
-            ref={featuredRef}
+            id="featured-Offer-carousel"
             className="hide-scrollbar flex flex-1 gap-4 overflow-x-auto scroll-smooth"
           >
             <OffersCard
@@ -93,7 +77,7 @@ const diningContainer = () => {
           </div>
 
           <button
-            onClick={() => scroll(featuredRef, 350)}
+            onClick={() => carouselScroll("right", "featured-Offer-carousel")}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-lg transition hover:bg-green-700 hover:text-white"
           >
             →
@@ -104,7 +88,7 @@ const diningContainer = () => {
       {/* Smaller offers */}
       <div className="flex items-center gap-3">
         <div
-          ref={secondaryRef}
+          id="Offer-carousel"
           className="hide-scrollbar flex flex-1 gap-4 overflow-x-auto scroll-smooth"
         >
           <OffersCard title="10% Cashback" subtitle="On every bill payment" />
@@ -118,14 +102,14 @@ const diningContainer = () => {
 
         <div className="flex gap-2">
           <button
-            onClick={() => scroll(secondaryRef, -300)}
+            onClick={() => carouselScroll("left", "Offer-carousel")}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
           >
             ←
           </button>
 
           <button
-            onClick={() => scroll(secondaryRef, 300)}
+            onClick={() => carouselScroll("right", "Offer-carousel")}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
           >
             →
@@ -136,20 +120,7 @@ const diningContainer = () => {
   );
 };
 
-/* =========================
-   DELIVERY
-========================= */
-
-const deliveryContainer = () => {
-  const carouselRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (amount: number) => {
-    carouselRef.current?.scrollBy({
-      left: amount,
-      behavior: "smooth",
-    });
-  };
-
+const DeliveryContainer = () => {
   return (
     <div className="mx-auto w-[60vw]">
       <div className="mb-4 flex items-center justify-between">
@@ -157,14 +128,14 @@ const deliveryContainer = () => {
 
         <div className="flex gap-2">
           <button
-            onClick={() => scroll(-500)}
+             onClick={() => carouselScroll("left", "Offer-carousel")}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
           >
             ←
           </button>
 
           <button
-            onClick={() => scroll(500)}
+            onClick={() => carouselScroll("right", "Offer-carousel")}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 transition hover:bg-green-700 hover:text-white"
           >
             →
@@ -173,7 +144,7 @@ const deliveryContainer = () => {
       </div>
 
       <div
-        ref={carouselRef}
+        id="Offer-carousel"
         className="hide-scrollbar flex gap-5 overflow-x-auto scroll-smooth"
       >
         <OffersCard title="Extra ₹200 Off" subtitle="No code required" />

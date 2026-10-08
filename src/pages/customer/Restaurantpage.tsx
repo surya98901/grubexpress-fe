@@ -10,6 +10,7 @@ import OfferContainer from "@/components/offers/OffersContainer";
 import RestaurntContainerSlide from "@/components/restaurant/RestaurantContainerSlide";
 import type { RootState } from "@/store/store";
 
+
 const RestaurantPage = () => {
 
   const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);

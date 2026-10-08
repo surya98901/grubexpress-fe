@@ -1,4 +1,4 @@
-import AddressCard from "@/components/customer/AddressCard";
+import {AddressCard} from "@/components/customer/AddressCard";
 import CartItemCard from "@/components/customer/CartItemCard";
 import { carouselScroll } from "@/assets/utils/helpers";
 import { paymentMethods } from "@/assets/utils/constants";

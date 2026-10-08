@@ -1,6 +1,6 @@
 export interface Address {
   _id?: string;
-  label: "Home" | "Work" | "Other" | "Restaurent";
+  label: string;
   addressLine: string;
   city: string;
   state: string;

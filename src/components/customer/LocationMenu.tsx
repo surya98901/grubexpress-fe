@@ -26,7 +26,6 @@ const LocationMenu = ({ className }: { className?: string }) => {
     document?.getElementById("restaurant-carousel")?.scrollIntoView({block:"end",behavior: "smooth" })
   }
  
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger >

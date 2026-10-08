@@ -10,6 +10,11 @@ import {
   Sandwich,
   Cake,
   Drumstick,
+    LayoutDashboard,
+  LayoutGrid,
+  SquareText,
+  CalendarCheck,
+  Settings,
 } from "lucide-react";
 import type { PaymentMethod } from "@/types/payment";
 
@@ -86,3 +91,37 @@ export const foodTypes = [
     icon: Beef,
   },
 ];
+export const menuItems = [
+  {
+    label: "Dashboard",
+    path: "/admin/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    label: "Reservations",
+    path: "/admin/services?type=reservation",
+    icon: CalendarCheck,
+  },
+  {
+    label: "Orders",
+    path: "/admin/services?type=orders",
+    icon: SquareText,
+  },
+  {
+    label: "Menu",
+    path: "/admin/menu",
+    icon: LayoutGrid,
+  },
+  {
+    label: "Settings",
+    path: "/admin/settings",
+    icon: Settings,
+  },
+];
+export const cityStateMap: Record<string, string> = {
+  Hyderabad: "Telangana",
+  Bangalore: "Karnataka",
+  Chennai: "Tamil Nadu",
+  Mumbai: "Maharashtra",
+  Delhi: "Delhi",
+};

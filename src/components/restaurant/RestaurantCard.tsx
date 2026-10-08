@@ -46,7 +46,7 @@ const deliveryCard = (data: any) => {
               {data.Name}
             </CardTitle>
 
-            <CardDescription>{data.Cusine[0] + " • " + data.Cusine[1]}</CardDescription>
+            <CardDescription>{Array.isArray(data?.Cusine) ? data.Cusine.join(" • ") : data?.Cusine || "Multi Cuisine"}</CardDescription>
           </div>
           <div className=" flex gap-2 px-2 items-center gap-1  text-sm font-semibold">
               <Star className="h-4 w-4 fill-white text-white rounded-full bg-green-700 p-1 w-[20px] h-[20px]" />
@@ -93,7 +93,7 @@ const diningCard = (data: any) => {
         </div>
         <CardContent className="flex justify-between mt-1 gap-1 ">
           <div className="flex justify-between text-xs  ">
-            <p className="text-muted-foreground line-clamp-1 ">{data.Cusine[0] + " • " + data.Cusine[1]}</p>
+            <p className="text-muted-foreground line-clamp-1 ">{Array.isArray(data?.Cusine) ? data.Cusine.join(" • ") : data?.Cusine || "Multi Cuisine"}</p>
             <p className="text-xs tracking-tighter">{data.avgPriceforTwo} for two</p>
           </div>
           <div className="flex justify-between text-xs ">

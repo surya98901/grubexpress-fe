@@ -6,11 +6,17 @@ export const getRestaurants = ({
   skip = 0,
   minRating,
   city,
+  search,
+  cuisine,
+  vegOnly,
 }: {
   limit?: number;
   skip?: number;
   minRating?: number;
   city?: string;
+  search?: string;
+  cuisine?: string;
+  vegOnly?: boolean;
 }) => {
   return api.get("/api/restaurants", {
     params: {
@@ -18,6 +24,9 @@ export const getRestaurants = ({
       skip,
       minRating,
       city,
+      search,
+      cuisine,
+      vegOnly,
     },
   });
 };

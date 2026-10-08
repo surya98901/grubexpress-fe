@@ -3,11 +3,13 @@ export interface userState {
     userName: string | null,
     role : string,
     RestaurantId : string | null
+    deliveryAddressId : string | null,
 }
 const initialState: userState = {
     userName: null,
     role : "customer",
     RestaurantId : null,
+    deliveryAddressId  : null
 }
 const userSlice = createSlice({
     name: "user",
@@ -29,13 +31,20 @@ const userSlice = createSlice({
                     state.RestaurantId = null
                 }
             },
+        setDeliveryAddress : (state,action:PayloadAction<string>)=>{
+            if(state.role  === "customer"){
+                state.deliveryAddressId =  action.payload
+            }
+        },
         removeUser :  (state)=>{
                 state.userName = null;
                 state.role = "";
                 state.RestaurantId =null;
+                state.deliveryAddressId = null;
             },
+
     }
 
 })
-export const { setUser, removeUser, setRole, setRestaurant, removeRestaurant} = userSlice.actions;
+export const { setUser, removeUser, setRole, setRestaurant, removeRestaurant,setDeliveryAddress} = userSlice.actions;
 export default userSlice.reducer;

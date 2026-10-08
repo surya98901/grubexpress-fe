@@ -1,7 +1,14 @@
 
 import {authApi }from "./api";
+import type {Address} from "@/types/address"
 export const getUserDetails = ()=>{
     return authApi.get("/api/user/profile")
+}
+export const getUserAddress = ()=>{
+    return authApi.get("/api/user/address")
+}
+export const setUserAddress = (formData : Address)=>{
+    return authApi.post("/api/user/address", formData)
 }
 export const addUserOrderItem = (id:string)=>{
     return authApi.post(`/api/user/cart/${id}`)

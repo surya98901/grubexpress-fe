@@ -1,49 +1,23 @@
+
 import {
-  LayoutDashboard,
-  LayoutGrid,
-  SquareText,
-  CalendarCheck,
-  Settings,
   LogOut,
   Menu,
   ChevronLeft,
 } from "lucide-react";
+
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-
-const menuItems = [
-  {
-    label: "Dashboard",
-    path: "/admin/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    label: "Reservations",
-    path: "/admin/services?type=reservation",
-    icon: CalendarCheck,
-  },
-  {
-    label: "Orders",
-    path: "/admin/services?type=orders",
-    icon: SquareText,
-  },
-  {
-    label: "Menu",
-    path: "/admin/menu",
-    icon: LayoutGrid,
-  },
-  {
-    label: "Settings",
-    path: "/admin/settings",
-    icon: Settings,
-  },
-];
+import { SignOutAlert } from "../genericUIcomponents/Alerts/AlertBox";
+import {menuItems} from "@/assets/utils/constants"
 
 export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
+  const [open, setOpen] = useState(false);
+
 
   return (
+    <>
     <aside
       className={`sticky top-0 z-40 flex h-screen shrink-0 flex-col border-r border-gray-200 bg-white transition-[width] duration-300 ease-in-out ${collapsed ? "w-20" : "w-60"}`}
     >
@@ -108,6 +82,7 @@ export default function SideMenu() {
           type="button"
           title={collapsed ? "Logout" : undefined}
           className={`group flex h-11 w-full items-center rounded-xl text-sm font-medium text-gray-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600 ${collapsed ? "justify-center" : "gap-3 px-3"}`}
+          onClick={() => setOpen(true)}
         >
           <LogOut className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
 
@@ -119,5 +94,7 @@ export default function SideMenu() {
         </button>
       </div>
     </aside>
+    <SignOutAlert open ={open} setOpen={setOpen}/>
+    </>
   );
 }
