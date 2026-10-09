@@ -1,4 +1,4 @@
-import {AddressCard} from "@/components/customer/AddressCard";
+import { AddressCard } from "@/components/customer/AddressCard";
 import CartItemCard from "@/components/customer/CartItemCard";
 import { carouselScroll } from "@/assets/utils/helpers";
 import { paymentMethods } from "@/assets/utils/constants";
@@ -8,7 +8,7 @@ import {
   ChevronRight,
   ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import type { PaymentMethod } from "@/types/payment";
@@ -23,23 +23,48 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useSelectedAddress from "@/hooks/use-selectedAddress";
 
 type CheckoutView = "payment" | "review" | null;
 
 const CheckOut = () => {
   const [view, setView] = useState<CheckoutView>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [address, setAddress] = useState<any>(null);
+  const [addressLoading, setAddressLoading] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod | null>(
     null,
   );
-
+  const addId = useSelector((state: RootState) => state.user.deliveryAddressId);
   const { items, total } = useSelector((state: RootState) => state.cart);
+
   const navigate = useNavigate();
   const orderCration = usePlaceOrder();
+  const getAddress = useSelectedAddress(addId);
   const deliveryFee = total > 1000 ? 10 : 35;
   const gst = Math.ceil(total * 0.05);
   const grandTotal = total + deliveryFee + gst;
 
+  useEffect(() => {
+    const fetchAddress = async () => {
+      setAddressLoading(true);
+      const result = await getAddress();
+
+      if (result && typeof result !== "string") {
+        setAddress(result.data.address ?? result);
+      } else {
+        setAddress(null);
+      }
+
+      setAddressLoading(false);
+    };
+    if (addId) {
+      fetchAddress();
+    } else {
+      setAddress(null);
+      setAddressLoading(false);
+    }
+  }, [addId]);
   const toggleView = (section: Exclude<CheckoutView, null>) => {
     setView((current) => (current === section ? null : section));
   };
@@ -64,26 +89,47 @@ const CheckOut = () => {
 
     navigate("/customer/secure/payments");
   };
-
+  console.log(address)
   return (
-    <div className="bg-gray-300 min-h-screen p-5 flex justify-between gap-5">
-      <div className="flex flex-col bg-white w-[70vw] rounded-xl p-3">
+    <div className="bg-gray-300 h-[95vh] ">
+      <section className="w-[80vw] p-5 flex justify-between gap-5 mx-auto">
+        <div className="flex flex-col bg-white w-[70vw] rounded-xl p-3">
         <h2 className="text-xl font-bold tracking-tighter flex items-center justify-center bg-black text-white rounded-xl p-1">
           Secure Checkout
         </h2>
 
         {/* ADDRESS */}
         <section className="px-2 py-4 border-b">
-          <div className="flex justify-between items-start">
-            <div>
+          <div className="flex justify-between items-start gap-4">
+            <div className="min-w-0">
               <p className="text-xl font-bold tracking-tighter">
-                Delivering to
+                {addressLoading
+                  ? "Loading delivery address..."
+                  : address
+                    ? `Delivering to `
+                    : "No delivery address selected"}
               </p>
 
-              <AddressCard data={null} />
+              {address && (
+                <p className="mt-1 text-base leading-6">
+                  {[
+      
+                    address.addressLine,
+                    address.city,
+                    address.state,
+                    address.pincode,
+
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
+                </p>
+              )}
             </div>
 
-            <button className="text-green-700 underline cursor-pointer">
+            <button
+              onClick={() => navigate("/customer/addresses")}
+              className="shrink-0 text-blue-700 hover:underline cursor-pointer"
+            >
               Change
             </button>
           </div>
@@ -176,7 +222,7 @@ const CheckOut = () => {
         </section>
       </div>
 
-      {/* ORDER SUMMARY */}
+
       <div className="w-[25vw] h-fit bg-white rounded-xl flex flex-col items-center py-4 gap-3">
         <button
           onClick={handleProceedPayments}
@@ -239,6 +285,7 @@ const CheckOut = () => {
           )}
         </section>
       </div>
+      </section>
     </div>
   );
 };

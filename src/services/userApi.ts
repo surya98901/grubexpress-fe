@@ -7,6 +7,9 @@ export const getUserDetails = ()=>{
 export const getUserAddress = ()=>{
     return authApi.get("/api/user/address")
 }
+export const getUserAddressId = (id: string)=>{
+    return authApi.get(`/api/user/address/${id}`)
+}
 export const setUserAddress = (formData : Address)=>{
     return authApi.post("/api/user/address", formData)
 }

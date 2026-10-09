@@ -13,7 +13,9 @@ import { UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SignOutAlert} from "@/components/genericUIcomponents/Alerts/AlertBox"
 
+
 const ProfileMenu = () => {
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -26,7 +28,7 @@ const ProfileMenu = () => {
         <DropdownMenuContent>
           <DropdownMenuGroup>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem><Link to= "/customer/profile"> Profile</Link></DropdownMenuItem>
             <DropdownMenuItem><Link to={`/customer/orders`}>Orders</Link></DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
           </DropdownMenuGroup>

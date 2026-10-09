@@ -3,13 +3,13 @@ export interface userState {
     userName: string | null,
     role : string,
     RestaurantId : string | null
-    deliveryAddressId : string | null,
+    deliveryAddressId : string ,
 }
 const initialState: userState = {
     userName: null,
     role : "customer",
     RestaurantId : null,
-    deliveryAddressId  : null
+    deliveryAddressId  : ""
 }
 const userSlice = createSlice({
     name: "user",
@@ -40,7 +40,7 @@ const userSlice = createSlice({
                 state.userName = null;
                 state.role = "";
                 state.RestaurantId =null;
-                state.deliveryAddressId = null;
+                state.deliveryAddressId = "";
             },
 
     }

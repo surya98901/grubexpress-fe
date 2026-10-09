@@ -1,5 +1,5 @@
 import CartItemCard from "@/components/customer/CartItemCard";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -59,8 +59,8 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 px-6 py-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="mb-6 ">
           <h1 className="text-3xl font-bold tracking-tight">
             Your Cart
           </h1>
