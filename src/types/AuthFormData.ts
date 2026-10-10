@@ -10,3 +10,9 @@ export interface signUpData {
   emailId: string;
   password: string;
 }
+export interface profileEdit{
+  firstName: string,
+    lastName: string,
+    userName: string,
+    phone: string,
+  }

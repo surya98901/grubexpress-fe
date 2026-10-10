@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import type { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import useGetRestaurants from "@/hooks/use-getRestaurants";
+import {useGetRestaurants }from "@/hooks/use-getRestaurants";
 
 interface RestaurantContainerProps {
   filter: string;
@@ -99,7 +99,7 @@ const ResataurantContainer = ({
   return (
     <>
       <div className="flex justify-between items-center mb-3">
-        <h2 className="text-xl font-bold text-gray-800">
+        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 ">
           Restaurants in <span className="text-green-700">{city}</span>
           {filteredRestaurants.length > 0 && (
             <span className="text-sm font-normal text-gray-500 ml-2">
@@ -110,7 +110,7 @@ const ResataurantContainer = ({
       </div>
 
       {filteredRestaurants.length > 0 ? (
-        <div className="flex flex-wrap w-[80vw] gap-6 justify-center md:justify-start items-stretch mx-4 ">
+        <div className="flex flex-wrap w-[80vw] gap-6 justify-center items-stretch ">
           {filteredRestaurants.map((restaurant) => (
             <Link
               key={restaurant._id}

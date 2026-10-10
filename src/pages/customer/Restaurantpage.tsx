@@ -20,14 +20,11 @@ const RestaurantPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-  
     if (!id) return
-
     const fetchRestaurantData = async () => {
       try {
         const restaurantResponse = await getRestaurant(id);
         setRestaurantData(restaurantResponse.data.restaurant);
-     
       } catch (error) {
         console.error("Error fetching restaurant:", error);
       }

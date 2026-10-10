@@ -1,8 +1,13 @@
 
+import type { profileEdit } from "@/types/AuthFormData";
 import {authApi }from "./api";
 import type {Address} from "@/types/address"
+type AddressFormData = Omit<Address, "_id">;
 export const getUserDetails = ()=>{
     return authApi.get("/api/user/profile")
+}
+export const editUserDetails = (formData : profileEdit)=>{
+    return authApi.patch("api/user/profile/edit", formData)
 }
 export const getUserAddress = ()=>{
     return authApi.get("/api/user/address")
@@ -10,7 +15,7 @@ export const getUserAddress = ()=>{
 export const getUserAddressId = (id: string)=>{
     return authApi.get(`/api/user/address/${id}`)
 }
-export const setUserAddress = (formData : Address)=>{
+export const setUserAddress = (formData : AddressFormData)=>{
     return authApi.post("/api/user/address", formData)
 }
 export const addUserOrderItem = (id:string)=>{

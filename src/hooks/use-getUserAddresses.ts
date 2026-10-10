@@ -4,7 +4,7 @@ import { getUserAddress } from "@/services/userApi";
 import type { Address } from "@/types/address";
 
 const useGetUserAddresses = () => {
-  const [addressData, setAddressData] = useState<Address[]>();
+  const [addressData, setAddressData] = useState<Address[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

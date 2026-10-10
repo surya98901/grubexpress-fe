@@ -310,7 +310,7 @@ const DiningFeed = () => {
       />
       <div
         id="restaurant-list"
-        className="relative my-3 flex  "
+        className="relative flex flex-col"
       >
         <ResataurantContainer
           filter={selectFilter}

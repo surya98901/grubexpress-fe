@@ -13,7 +13,7 @@ type UseGetRestaurantsProps = {
   minRating?: number;
 };
 
-const useGetRestaurants = ({
+export const useGetRestaurants = ({
   limit = 10,
   skip = 0,
   city = "",
@@ -80,4 +80,6 @@ const useGetRestaurants = ({
   };
 };
 
-export default useGetRestaurants;
+export const useGetRestaurantById = (id: string)=>{
+
+}

@@ -13,6 +13,7 @@ import type { Address } from "@/types/address";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cityStateMap} from "@/assets/utils/constants"
 import { useEffect, useState } from "react";
 import { setUserAddress } from "@/services/userApi";
 import { useSelector } from "react-redux";
@@ -20,20 +21,13 @@ import type { RootState } from "@/store/store";
 
 const labels = ["Home", "Work", "Other", "Restaurant"];
 
-const cityStateMap: Record<string, string> = {
-  Hyderabad: "Telangana",
-  Bangalore: "Karnataka",
-  Chennai: "Tamil Nadu",
-  Mumbai: "Maharashtra",
-  Delhi: "Delhi",
-};
 
+type AddressFormData = Omit<Address, "_id">;
 const AddressAlert = () => {
   const city = useSelector((state: RootState) => state.location.city);
 
   const [open, setOpen] = useState(false);
-
-  const [formData, setFormData] = useState<Address>({
+  const [formData, setFormData] = useState<AddressFormData>({
     addressLine: "",
     city: city || "",
     state: cityStateMap[city] || "",
@@ -49,9 +43,9 @@ const AddressAlert = () => {
     }));
   }, [city]);
 
-  const updateField = <K extends keyof Address>(
+  const updateField = <K extends keyof AddressFormData>(
     field: K,
-    value: Address[K],
+    value: AddressFormData[K],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -59,7 +53,7 @@ const AddressAlert = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {

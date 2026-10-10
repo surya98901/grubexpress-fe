@@ -1,4 +1,4 @@
-import { AddressCard } from "@/components/customer/AddressCard";
+import { AddressDisplyTile } from "@/components/customer/AddressCard";
 import CartItemCard from "@/components/customer/CartItemCard";
 import { carouselScroll } from "@/assets/utils/helpers";
 import { paymentMethods } from "@/assets/utils/constants";
@@ -89,7 +89,7 @@ const CheckOut = () => {
 
     navigate("/customer/secure/payments");
   };
-  console.log(address)
+  
   return (
     <div className="bg-gray-300 h-[95vh] ">
       <section className="w-[80vw] p-5 flex justify-between gap-5 mx-auto">
@@ -101,30 +101,7 @@ const CheckOut = () => {
         {/* ADDRESS */}
         <section className="px-2 py-4 border-b">
           <div className="flex justify-between items-start gap-4">
-            <div className="min-w-0">
-              <p className="text-xl font-bold tracking-tighter">
-                {addressLoading
-                  ? "Loading delivery address..."
-                  : address
-                    ? `Delivering to `
-                    : "No delivery address selected"}
-              </p>
-
-              {address && (
-                <p className="mt-1 text-base leading-6">
-                  {[
-      
-                    address.addressLine,
-                    address.city,
-                    address.state,
-                    address.pincode,
-
-                  ]
-                    .filter(Boolean)
-                    .join(", ")}
-                </p>
-              )}
-            </div>
+            <AddressDisplyTile data = {address} loading ={addressLoading}/>
 
             <button
               onClick={() => navigate("/customer/addresses")}

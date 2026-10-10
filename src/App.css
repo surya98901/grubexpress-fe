@@ -190,7 +190,8 @@
 .hide-scrollbar {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
-  overflow-x: auto;          /* Ensure scrolling still works */
+  overflow-x: auto; 
+  overflow-y:auto;      /* Ensure scrolling still works */
 }
 button {
   cursor: pointer;

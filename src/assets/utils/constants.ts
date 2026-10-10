@@ -10,11 +10,14 @@ import {
   Sandwich,
   Cake,
   Drumstick,
-    LayoutDashboard,
+  LayoutDashboard,
   LayoutGrid,
   SquareText,
   CalendarCheck,
   Settings,
+  Package,
+  CreditCard,
+  MapPin,
 } from "lucide-react";
 import type { PaymentMethod } from "@/types/payment";
 
@@ -125,3 +128,42 @@ export const cityStateMap: Record<string, string> = {
   Mumbai: "Maharashtra",
   Delhi: "Delhi",
 };
+export const profileOptions = [
+  {
+    label: "Orders",
+    icon: Package,
+    description: "Track your food and past orders",
+    tagline: "Your orders live here",
+    DetailDescription:
+      "Your delicious discoveries, current deliveries, and past orders will show up here.",
+    linkTag: "Explore restaurants",
+    link: "/customer/restaurants",
+  },
+  {
+    label: "Payments",
+    icon: CreditCard,
+    description: "Manage your payment methods",
+    tagline: "Payment methods",
+    DetailDescription:
+      "Your saved payment methods will appear here.",
+    linkTag: " Add payments",
+  },
+  {
+    label: "Addresses",
+    icon: MapPin,
+    description: "Your saved delivery locations",
+    tagline: "Delivery addresses",
+    DetailDescription:
+      "Manage your home, work, and other delivery addresses.",
+    linkTag: " Add new address",
+  },
+  {
+    label: "Settings",
+    icon: Settings,
+    description: "Preferences and account security",
+    tagline: "Account preferences",
+    DetailDescription:
+      "Your account preferences and security options will appear here.",
+  },
+];
+

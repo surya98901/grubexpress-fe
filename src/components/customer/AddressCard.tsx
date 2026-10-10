@@ -3,8 +3,9 @@ import AddressAlert from "@/components/genericUIcomponents/Alerts/AddressAlert";
 import { useDispatch } from "react-redux";
 import { setDeliveryAddress } from "@/store/slices/userSlice";
 import { useState } from "react";
-
-export const AddressCard = ({ data }: { data: any }) => {
+import type { Address } from "@/types/address";
+type AddressCardtype = { data: Address; loading?: boolean };
+export const AddressCard = ({ data }: AddressCardtype) => {
   const dispatch = useDispatch();
   const [select, setSelect] = useState<boolean>(false);
 
@@ -48,19 +49,38 @@ export const AddressCard = ({ data }: { data: any }) => {
     </div>
   );
 };
-
 export const AddAddressCard = () => {
   return (
     <div className="w-[20vw] shadow-xl border-t-2 border-gray-300 rounded-xl flex gap-2 p-5 shrink-0">
       <section className="text-gray-600 py-4 px-1 w-10 h-10">
-          <MapPinPlus />
-        </section>
+        <MapPinPlus />
+      </section>
       <div className="flex flex-col justify-between py-3">
-        
         <AddressAlert />
         <p>Add your address to get your order delivered</p>
       </div>
-      
+    </div>
+  );
+};
+export const AddressDisplyTile = ({ data, loading }: AddressCardtype) => {
+  return (
+    <div className="min-w-0">
+      <p className="text-xl font-bold tracking-tighter">
+        {loading
+          ? "Loading delivery address..."
+          : data
+            ? `Delivering to `
+            : "No delivery address selected"}
+      </p>
+
+      {data && (
+        <section className="px-2">
+          <p className="mt-1 text-base leading-6">{data.addressLine}</p>
+          <p className="mt-1 text-base leading-6">
+            {[data.city, data.state, data.pincode].filter(Boolean).join(", ")}
+          </p>
+        </section>
+      )}
     </div>
   );
 };

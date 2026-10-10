@@ -1,29 +1,21 @@
-import { getOrders } from "@/services/userApi"
-import { useEffect, useState } from "react"
-import OrderCards from "@/components/orders/OrderCards"
+import OrderCards from "@/components/orders/OrderCards";
+import useGetOrders from "@/hooks/use-getOrders";
 
-import type {OrderDetails} from "@/types/order"
+const Order = () => {
+  const { orders, loading, error } = useGetOrders();
 
-const Order = ()=>{
-    const [orders, setOrders] = useState<OrderDetails[] | null>(null)
-    useEffect(()=>{
-        const fetchOrders = async ()=>{
-            try{
-                const response = await getOrders();
-                setOrders(response.data.data)
-            }catch(err){
-                console.log(err);
-            }
-        }
-        fetchOrders()
-    }, [])
+  if (loading) return <p>Loading orders...</p>;
+  if (error) return <p>{error}</p>;
+  if (!orders?.length) return <p>No orders found.</p>;
 
-    return (
-        <div>
-            <section>
-                {orders?.map((item)=> <OrderCards key= {item._id} data = {item}/>)}
-            </section>
-        </div>
-    )
-}
-export default Order
+  return (
+    <div>
+      <section>
+        {orders?.map((item) => (
+          <OrderCards key={item._id} data={item} />
+        ))}
+      </section>
+    </div>
+  );
+};
+export default Order;
