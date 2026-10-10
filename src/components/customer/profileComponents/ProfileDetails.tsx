@@ -4,7 +4,7 @@ import useGetOrders from "@/hooks/use-getOrders";
 import useGetUserAddresses from "@/hooks/use-getUserAddresses";
 import { ArrowUpRight, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { AddAddressCard, AddressCard } from "../AddressCard";
+import {  AddressCard } from "../AddressCard";
 import AddressAlert from "@/components/genericUIcomponents/Alerts/AddressAlert";
 
 const ProfileDetails = ({ active }: { active: string }) => {
