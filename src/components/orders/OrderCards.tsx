@@ -89,24 +89,18 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
             alt={restaurantData?.Name || "Restaurant"}
             className="h-40 w-full rounded-xl object-cover shadow-sm sm:h-auto sm:w-36 sm:shrink-0 md:w-44"
           />
-
           <div className="flex min-w-0 flex-1 flex-col">
             <section className="flex flex-col gap-4 py-2 sm:flex-row sm:justify-between sm:gap-5">
               <div className="min-w-0">
                 <h3 className="break-words text-lg font-bold text-gray-900 sm:text-xl">
                   {restaurantData?.Name || "Loading restaurant..."}
                 </h3>
-
                 <p className="text-sm text-gray-500">
                   {restaurantData?.address?.city}
                 </p>
-
                 <p className="mt-1 break-all text-xs text-gray-500">
                   Order #{data._id}
                 </p>
-
-              
-
                 <div className="mt-3">
                   <Draw data={data} resData={restaurantData} />
                 </div>
