@@ -12,7 +12,7 @@ const RestaurantHeroBanner = ({ data }: { data: any }) => {
 };
 const foodDeliverBanner = (data: any) => {
   return (
-    <div className="flex flex-col  w-[60vw]">
+    <div className="flex flex-col w-[100%]">
       <img
         src={data?.imageURL}
         alt=""

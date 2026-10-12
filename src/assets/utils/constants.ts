@@ -46,6 +46,7 @@ export const orderTable = {
   title: "Order",
   tagLine: "Manage and track customer orders",
   rows: ["Items", "Quantity", "Price", "Date", "Status"],
+  rowValues : [ "totalAmount","createdAt", "orderStatus"],
   icon: ClipboardList,
 };
 export const reservationTable = {
