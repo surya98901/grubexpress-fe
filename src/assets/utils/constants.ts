@@ -18,6 +18,10 @@ import {
   Package,
   CreditCard,
   MapPin,
+  Sparkles,
+  Clock3,
+  Bike,
+  Table2,
 } from "lucide-react";
 import type { PaymentMethod } from "@/types/payment";
 
@@ -167,4 +171,86 @@ export const profileOptions = [
       "Your account preferences and security options will appear here.",
   },
 ];
+export const orderStatuses = [
+  {
+    name: "New",
+    value: 0,
+    icon: Sparkles,
+    bg: "bg-blue-50",
+    border: "border-blue-100",
+    iconBg: "bg-blue-600",
+  },
+  {
+    name: "Preparation",
+    value: 0,
+    icon: Clock3,
+    bg: "bg-orange-50",
+    border: "border-orange-100",
+    iconBg: "bg-orange-500",
+  },
+  {
+    name: "Out for Delivery",
+    value: 0,
+    icon: Bike,
+    bg: "bg-purple-50",
+    border: "border-purple-100",
+    iconBg: "bg-purple-600",
+  },
+];
 
+export const dineInStatuses = [
+  {
+    name: "New",
+    value: 0,
+    icon: Sparkles,
+    bg: "bg-blue-50",
+    border: "border-blue-100",
+    iconBg: "bg-blue-600",
+  },
+  {
+    name: "Reserved",
+    value: 0,
+    icon: CalendarCheck,
+    bg: "bg-orange-50",
+    border: "border-orange-100",
+    iconBg: "bg-orange-500",
+  },
+  {
+    name: "Available",
+    value: 0,
+    icon: Table2,
+    bg: "bg-green-50",
+    border: "border-green-100",
+    iconBg: "bg-green-600",
+  },
+];
+
+export const orderList = [
+  {
+    image: "...",
+    title: "Chicken Biryani",
+    time: "12 mins",
+    value: "₹240",
+  },
+  {
+    image: "...",
+    title: "Paneer Butter Masala",
+    time: "18 mins",
+    value: "₹180",
+  },
+];
+
+export const reservationList = [
+  {
+    image: "...",
+    title: "Table 12",
+    time: "7:30 PM",
+    value: "4 guests",
+  },
+  {
+    image: "...",
+    title: "Table 4",
+    time: "8:00 PM",
+    value: "2 guests",
+  },
+];

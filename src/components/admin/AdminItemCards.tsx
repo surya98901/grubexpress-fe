@@ -1,13 +1,13 @@
 import { Leaf, Ham } from "lucide-react";
 import Rating from "@/components/genericUIcomponents/rating";
-import type { menuItems } from "@/types/menuItem";
+
 import ItemEditDraw from "./ItemsEditDraw";
 
 const AdminItemCard = ({
   data,
   onItemUpdated,
 }: {
-  data: menuItems;
+  data: any;
   onItemUpdated: () => void;
 }) => {
   const isVeg = data.type === "veg";

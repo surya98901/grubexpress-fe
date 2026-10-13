@@ -1,215 +1,173 @@
-
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import AdminlistCard from "@/components/admin/AdminlistCards";
+import { ClipboardList, Utensils, RotateCw } from "lucide-react";
+import useGetAdminOrders from "@/hooks/use-getAdminOrders";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { dineInStatuses, orderStatuses } from "@/assets/utils/constants";
 
-import {
-  Bike,
-  CalendarCheck,
-  ClipboardList,
-  Clock3,
-  Sparkles,
-  Table2,
-  Utensils,
-  RotateCw,
-} from "lucide-react";
 type ServiceType = "orders" | "dineins";
 
-const orderStatuses = [
-  {
-    name: "New",
-    value: 0,
-    icon: Sparkles,
-    bg: "bg-blue-50",
-    border: "border-blue-100",
-    iconBg: "bg-blue-600",
-  },
-  {
-    name: "Preparation",
-    value: 0,
-    icon: Clock3,
-    bg: "bg-orange-50",
-    border: "border-orange-100",
-    iconBg: "bg-orange-500",
-  },
-  {
-    name: "Out for Delivery",
-    value: 0,
-    icon: Bike,
-    bg: "bg-purple-50",
-    border: "border-purple-100",
-    iconBg: "bg-purple-600",
-  },
-];
-
-const dineInStatuses = [
-  {
-    name: "New",
-    value: 0,
-    icon: Sparkles,
-    bg: "bg-blue-50",
-    border: "border-blue-100",
-    iconBg: "bg-blue-600",
-  },
-  {
-    name: "Reserved",
-    value: 0,
-    icon: CalendarCheck,
-    bg: "bg-orange-50",
-    border: "border-orange-100",
-    iconBg: "bg-orange-500",
-  },
-  {
-    name: "Available",
-    value: 0,
-    icon: Table2,
-    bg: "bg-green-50",
-    border: "border-green-100",
-    iconBg: "bg-green-600",
-  },
-];
-
-const orderList = [
-  {
-    image: "...",
-    title: "Chicken Biryani",
-    time: "12 mins",
-    value: "₹240",
-  },
-  {
-    image: "...",
-    title: "Paneer Butter Masala",
-    time: "18 mins",
-    value: "₹180",
-  },
-];
-
-const reservationList = [
-  {
-    image: "...",
-    title: "Table 12",
-    time: "7:30 PM",
-    value: "4 guests",
-  },
-  {
-    image: "...",
-    title: "Table 4",
-    time: "8:00 PM",
-    value: "2 guests",
-  },
-];
-const AdminServiceUpdates = ()=>{
-      const [selectService, setSelectService] = useState<ServiceType>("orders");
+const AdminServiceUpdates = () => {
+  const [selectService, setSelectService] = useState<ServiceType>("orders");
+  const restaurantId = useSelector(
+    (state: RootState) => state.user.RestaurantId,
+  );
 
   const isOrders = selectService === "orders";
   const statusList = isOrders ? orderStatuses : dineInStatuses;
-  const currentList = isOrders ? orderList : reservationList;
 
-    return (
-         <aside className="w-full max-w-[360px] shrink-0 space-y-5">
-          <div className="grid grid-cols-2 gap-2 ">
-            <button
-              type="button"
-              onClick={() => setSelectService("orders")}
-              className={`flex items-center gap-3 rounded-2xl border px-4 text-left transition-all duration-200 ${
-                isOrders
-                  ? "border-yellow-400 bg-yellow-400 shadow-md"
-                  : "border-gray-200 bg-white hover:-translate-y-0.5 hover:border-yellow-300 hover:shadow-md"
-              }`}
+  const { orderData, loading, error } = useGetAdminOrders(
+    isOrders ? restaurantId : null,
+  );
+
+  // Flatten items while including order-level metadata
+  const displayedItems = useMemo(() => {
+    if (!isOrders || !orderData) return [];
+
+    return orderData.flatMap((order) =>
+      order.items.map((item) => ({
+        ...item,
+        orderId: order._id,
+        orderStatus: order.orderStatus,
+        createdAt: order.createdAt,
+      })),
+    );
+  }, [orderData, isOrders]);
+
+  // Single-pass count lookup
+  const statusCounts = useMemo(() => {
+    if (!isOrders || !orderData)
+      return { New: 0, Preparation: 0, "Out for Delivery": 0 };
+
+    return orderData.reduce(
+      (acc, order) => {
+        if (order.orderStatus === "PLACED") acc.New += 1;
+        else if (order.orderStatus === "PREPARING") acc.Preparation += 1;
+        else if (order.orderStatus === "OUT_FOR_DELIVERY")
+          acc["Out for Delivery"] += 1;
+        return acc;
+      },
+      { New: 0, Preparation: 0, "Out for Delivery": 0 },
+    );
+  }, [orderData, isOrders]);
+
+  return (
+    <aside className="w-full max-w-[360px] shrink-0 space-y-5">
+      {/* Service Switcher Buttons */}
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setSelectService("orders")}
+          className={`flex items-center gap-3 rounded-2xl border px-4 text-left transition-all duration-200 ${
+            isOrders
+              ? "border-yellow-400 bg-yellow-400 shadow-md"
+              : "border-gray-200 bg-white hover:-translate-y-0.5 hover:border-yellow-300 hover:shadow-md"
+          }`}
+        >
+          <div
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+              isOrders ? "bg-white" : "bg-yellow-100"
+            }`}
+          >
+            <ClipboardList className="h-5 w-5 text-yellow-700" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold text-gray-900">
+              {orderData?.length || 0}
+            </p>
+            <span className="text-sm text-gray-600">Orders</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSelectService("dineins")}
+          className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${
+            !isOrders
+              ? "border-green-500 bg-green-500 shadow-md"
+              : "border-gray-200 bg-white hover:-translate-y-0.5 hover:border-green-300 hover:shadow-md"
+          }`}
+        >
+          <div
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+              !isOrders ? "bg-white" : "bg-green-100"
+            }`}
+          >
+            <Utensils className="h-5 w-5 text-green-700" />
+          </div>
+          <div>
+            <p className="text-2xl font-bold text-gray-900">0</p>
+            <span className="text-sm text-gray-600">Dine-ins</span>
+          </div>
+        </button>
+      </div>
+
+      {/* Status Counters */}
+      <section className="grid grid-cols-3 gap-3">
+        {statusList.map((status) => {
+          const Icon = status.icon;
+          return (
+            <div
+              key={status.name}
+              className={`rounded-2xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${status.bg} ${status.border}`}
             >
               <div
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-                  isOrders ? "bg-white" : "bg-yellow-100"
-                }`}
+                className={`mb-2 flex h-9 w-9 items-center justify-center rounded-lg ${status.iconBg}`}
               >
-                <ClipboardList className="h-5 w-5 text-yellow-700" />
+                <Icon className="h-4 w-4 text-white" />
               </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">0</p>
-                <span className="text-sm text-gray-600">Orders</span>
-              </div>
-            </button>
 
-            <button
-              type="button"
-              onClick={() => setSelectService("dineins")}
-              className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${
-                !isOrders
-                  ? "border-green-500 bg-green-500 shadow-md"
-                  : "border-gray-200 bg-white hover:-translate-y-0.5 hover:border-green-300 hover:shadow-md"
-              }`}
-            >
-              <div
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-                  !isOrders ? "bg-white" : "bg-green-100"
-                }`}
-              >
-                <Utensils className="h-5 w-5 text-green-700" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">0</p>
-                <span className="text-sm text-gray-600">Dine-ins</span>
-              </div>
-            </button>
+              <p className="text-xl font-bold text-gray-900">
+                {statusCounts[status.name as keyof typeof statusCounts] ?? 0}
+              </p>
+
+              <span className="text-xs font-medium text-gray-500">
+                {status.name}
+              </span>
+            </div>
+          );
+        })}
+      </section>
+
+  
+      {/* Activity List Container */}
+      <section className="flex max-h-[100vh] min-h-[80vh] flex-col rounded-2xl bg-gray-200 p-3">
+        <div className="my-2 flex shrink-0 items-center justify-between px-3">
+          <div>
+            <h3 className="font-semibold text-gray-900">
+              {isOrders ? "Today's Orders" : "Today's Reservations"}
+            </h3>
+            <p className="mt-0.5 text-xs text-gray-500">
+              {isOrders
+                ? "Recent order activity"
+                : "Recent reservation activity"}
+            </p>
           </div>
 
-          <section className="grid grid-cols-3 gap-3">
-            {statusList.map((status) => {
-              const Icon = status.icon;
-              return (
-                <div
-                  key={status.name}
-                  className={`rounded-2xl border p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${status.bg} ${status.border}`}
-                >
-                  <div
-                    className={`mb-2 flex h-9 w-9 items-center justify-center rounded-lg ${status.iconBg}`}
-                  >
-                    <Icon className="h-4 w-4 text-white" />
-                  </div>
+          <button
+            type="button"
+            className="rounded-lg p-1 text-gray-500 transition hover:bg-white hover:text-gray-900"
+          >
+            <RotateCw className="h-5 w-5" />
+          </button>
+        </div>
 
-                  <p className="text-xl font-bold text-gray-900">
-                    {status.value}
-                  </p>
+        {/* Scrollable List Items */}
+        <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-1">
+          {displayedItems.length > 0 ? (
+            displayedItems.map((item) => (
+              <AdminlistCard key={item.menuItemId} list={item} />
+            ))
+          ) : (
+            <p className="py-8 text-center text-sm text-gray-500">
+              {loading ? "Loading..." : "No items found"}
+            </p>
+          )}
+        </div>
+      </section>
+    </aside>
+  );
+};
 
-                  <span className="text-xs font-medium text-gray-500">
-                    {status.name}
-                  </span>
-                </div>
-              );
-            })}
-          </section>
-
-
-          <section className="flex min-h-[500px] flex-col rounded-2xl bg-gray-200 p-3">
-
-
-            <div className="my-2 flex items-center justify-between px-3">
-              <div>
-                <h3 className="font-semibold text-gray-900">
-                  {isOrders ? "Today's Orders" : "Today's Reservations"}
-                </h3>
-
-                <p className="mt-0.5 text-xs text-gray-500">
-                  {isOrders
-                    ? "Recent order activity"
-                    : "Recent reservation activity"}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="rounded-lg p-1 text-gray-500 transition hover:bg-white hover:text-gray-900 "
-              >
-                <RotateCw className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* List */}
-
-            <div className="mt-2 flex flex-col px-1 gap-2">
-              {currentList.map((item)=><AdminlistCard list={item} /> )}
-            </div>
-          </section>
-        </aside>
-    )
-}
-export default  AdminServiceUpdates
+export default AdminServiceUpdates;
