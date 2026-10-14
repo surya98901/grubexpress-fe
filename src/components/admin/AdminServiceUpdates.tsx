@@ -17,7 +17,7 @@ const AdminServiceUpdates = () => {
   const isOrders = selectService === "orders";
   const statusList = isOrders ? orderStatuses : dineInStatuses;
 
-  const { orderData, loading, error } = useGetAdminOrders(
+  const { orderData, loading} = useGetAdminOrders(
     isOrders ? restaurantId : null,
   );
 
@@ -131,7 +131,7 @@ const AdminServiceUpdates = () => {
       </section>
 
   
-      {/* Activity List Container */}
+
       <section className="flex max-h-[100vh] min-h-[80vh] flex-col rounded-2xl bg-gray-200 p-3">
         <div className="my-2 flex shrink-0 items-center justify-between px-3">
           <div>
@@ -153,7 +153,6 @@ const AdminServiceUpdates = () => {
           </button>
         </div>
 
-        {/* Scrollable List Items */}
         <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-1">
           {displayedItems.length > 0 ? (
             displayedItems.map((item) => (
