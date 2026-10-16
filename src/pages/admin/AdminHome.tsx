@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import type { Restaurant } from "@/types/restaurant";
 import { getAdminRestaurents } from "@/services/adminApis";
@@ -7,6 +6,7 @@ import { setRestaurant } from "@/store/slices/userSlice";
 import RestaurantHeroBanner from "@/components/restaurant/RestaurantHeroBanner";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Plus, Store, UtensilsCrossed } from "lucide-react";
+
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -112,8 +112,10 @@ const AdminHome = () => {
                   onClick={() => handleRestaurantSelection(restaurant._id)}
                   className="group relative min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-orange-300 hover:shadow-xl hover:shadow-orange-950/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
                 >
-                  <div className="overflow-hidden  rounded-xl">
-                    <h2 className="text-xl font-bold my-2 px-2">{restaurant.Name}-{restaurant.address.city}</h2>
+                  <div className="overflow-hidden rounded-xl">
+                    <h2 className="my-2 px-2 text-xl font-bold">
+                      {restaurant.Name}-{restaurant.address.city}
+                    </h2>
                     <RestaurantHeroBanner data={restaurant} />
                   </div>
 
@@ -136,6 +138,31 @@ const AdminHome = () => {
                   </div>
                 </button>
               ))}
+
+              <button
+                type="button"
+                onClick={() => navigate("/admin/add-restaurant")}
+                className="group flex min-h-[300px] flex-col items-center justify-center gap-5 rounded-2xl border-2 border-dashed border-green-600 bg-green-700 p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-green-800 hover:shadow-xl hover:shadow-green-950/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
+              >
+                <span className="flex size-16 items-center justify-center rounded-2xl bg-white/15 text-white transition-transform duration-300 group-hover:scale-110">
+                  <Plus size={32} strokeWidth={1.8} />
+                </span>
+
+                <div>
+                  <h3 className="text-xl font-bold text-white">
+                    Add your restaurant
+                  </h3>
+                  <p className="mt-2 max-w-[220px] text-sm leading-6 text-green-100">
+                    Bring another kitchen to GrubExpress and manage everything
+                    in one place.
+                  </p>
+                </div>
+
+                <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition-colors group-hover:bg-green-50">
+                  Get started
+                  <ArrowRight size={16} />
+                </span>
+              </button>
             </div>
           </section>
         ) : (

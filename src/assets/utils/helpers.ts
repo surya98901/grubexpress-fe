@@ -35,3 +35,10 @@ export function signUpFormValidation(formData: signUpData): string | null {
 export const carouselScroll = (side : string, id : string) => {
     side === "left" ? document.getElementById(id)?.scrollBy({ left: -300, behavior: "smooth" }): document.getElementById(id)?.scrollBy({ left: 300, behavior: "smooth" })
   };
+  export const formatDate = (date: string | Date): string => {
+  return new Date(date).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
