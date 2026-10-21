@@ -50,7 +50,7 @@ const SignUp = ({ userType }: { userType: string }) => {
     <div className="flex flex-col w-full items-center justify-center bg-black p-4 h-[90vh]">
       <FieldSet className="w-[40vw] rounded-xl border border-zinc-500 bg-zinc-900/60 p-6 shadow-2xl gap-2 backdrop-blur-xl">
         <FieldLegend className="mb-1 text-center text-5xl font-bold tracking-tight text-zinc-100 bg-black p-2 rounded-lg">
-          Sign up
+           {!userType? "Sign up": userType + " Sign up"}
         </FieldLegend>
 
         <form onSubmit={onSubmission} className="space-y-4">

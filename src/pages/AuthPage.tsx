@@ -6,7 +6,6 @@ const Auth = ()=>{
   const [params ] =useSearchParams()
   const mode = params.get("mode");
   const userType = params.get("role") || ""
-  console.log(userType)
 
   return mode === "signin"  ? <SignIn userType = {userType} /> :  <SignUp userType = {userType}/>
 }

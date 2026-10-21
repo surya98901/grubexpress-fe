@@ -5,17 +5,21 @@ import { addUserOrderItem, removeUserOrderItem } from "@/services/userApi";
 import { setCart } from "@/store/slices/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/store/store";
+import { useState } from "react";
+import SignInAlert from "../genericUIcomponents/Alerts/SignInAlert";
 
 
 const ItemCard = ({ data }: { data: menuItems }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const user = useSelector((state:RootState)=> state.user.userName)
+
   const cartItem = cartItems.find((item) => item.menuItemId === data._id);
   const quantity = cartItem?.quantity ?? 0;
+
   const addToCart = async () => {
     try {
       const response = await addUserOrderItem(data._id);
-
       dispatch(setCart(response.data.data));
     } catch (err) {
       console.log(err);
@@ -25,7 +29,6 @@ const ItemCard = ({ data }: { data: menuItems }) => {
   const removeFromCart = async () => {
     try {
       const response = await removeUserOrderItem(data._id);
-
       dispatch(setCart(response.data.data));
     } catch (err) {
       console.log(err);
@@ -76,7 +79,7 @@ const ItemCard = ({ data }: { data: menuItems }) => {
           className="h-[140px] w-full rounded-xl object-cover shadow-sm transition-transform duration-300 group-hover:scale-[1.02]"
         />
 
-        {quantity == 0 ? (
+        {user ? quantity == 0 ? (
           <button
             className="absolute -bottom-3 left-1/2 w-[110px] -translate-x-1/2 rounded-lg border border-gray-200 bg-white py-2 text-sm font-bold text-green-700 shadow-md transition-all hover:bg-green-700 hover:text-white"
             onClick={() => addToCart()}
@@ -103,7 +106,7 @@ const ItemCard = ({ data }: { data: menuItems }) => {
               +
             </button>
           </div>
-        )}
+        ): <SignInAlert label = {"Add"} style = {"absolute -bottom-3 left-1/2 w-[110px] -translate-x-1/2 rounded-lg border border-gray-200 bg-white py-2 text-sm font-bold text-green-700 shadow-md transition-all hover:bg-green-700 hover:text-white"}/>}
       </div>
     </div>
   );
