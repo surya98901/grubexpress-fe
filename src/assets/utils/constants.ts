@@ -57,6 +57,7 @@ export const reservationTable = {
   title: "Reservation",
   tagLine: "Manage and track reservations",
   rows: ["Name", "Table", "Head count", "Time", "Date", "Status"],
+  rowValues : [ "peopleCount","createdAt", "Status"],
   icon: Utensils,
 };
 export const paymentMethods: PaymentMethod[] = [

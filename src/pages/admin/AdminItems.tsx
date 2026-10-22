@@ -1,5 +1,5 @@
 
-const AdminItem = ()=>{
+const AdminAddItem = ()=>{
     return (<div>Admin Item</div>)
 }
-export default AdminItem;
+export default AdminAddItem;

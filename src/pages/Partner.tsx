@@ -40,7 +40,7 @@ const PartnerPage = () => {
               <div className="text-4xl font-black">GE</div>
 
               <p className="mt-1 text-sm font-bold tracking-wide">
-                PARTNER WITH SWIFFY!
+                PARTNER WITH GRUBEXPRESS
               </p>
 
               <div className="mt-2 h-1 w-10 bg-orange-500" />

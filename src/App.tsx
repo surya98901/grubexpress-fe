@@ -16,9 +16,10 @@ import AdminDetailDisplay from "./pages/admin/AdminDetailDisplay";
 import AdminMenu from "./pages/admin/AdminMenu";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminRestaurant from "./pages/admin/AdminRestaurant";
-import AdminItem from "@/pages/admin/AdminItems";
+import AdminAddItem from "@/pages/admin/AdminItems";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminAddRestaurant from "./pages/admin/AdminAddRestaurant";
 
 function App() {
   return (
@@ -44,8 +45,9 @@ function App() {
         <Route path="/admin/services" element={<AdminDetailDisplay />} />
         <Route path="/admin/restaurant" element={<AdminRestaurant />} />
         <Route path="/admin/menu" element={<AdminMenu />} />
-        <Route path="/admin/menu/items" element={<AdminItem />} />
+        <Route path="/admin/menu/items" element={<AdminAddItem />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/admin/add-restaurant" element={<AdminAddRestaurant />} />
         <Route path="/admin/profile" element={<Profile />} />
       </Route>
     </Routes>
