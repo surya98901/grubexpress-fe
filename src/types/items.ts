@@ -6,10 +6,13 @@ export interface FoodItems {
 export interface itemData {
   title: string;
   description: string;
+  imageURL : string;
   serves: number;
   price: number;
   cusine: string;
   category: string;
+  rating : number;
   type: string;
-  available?: boolean;
+  available : boolean;
+  foodItemId :string;
 }

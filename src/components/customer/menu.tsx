@@ -35,7 +35,7 @@ const Menu = () => {
 
   const filteredMenuItems = useMemo(() => {
     return menuData.filter((item) => {
-      // Search text filter
+
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchesTitle = item.title?.toLowerCase().includes(q);
@@ -44,12 +44,12 @@ const Menu = () => {
         if (!matchesTitle && !matchesDesc && !matchesCategory) return false;
       }
 
-      // Veg only filter
+
       if (vegOnly && item.type !== "veg") {
         return false;
       }
 
-      // Category filter
+
       if (selectedCategory !== "All") {
         const catLabel = selectedCategory.toLowerCase();
         const itemCat = (item.category || "").toLowerCase();
@@ -68,7 +68,7 @@ const Menu = () => {
 
   return (
     <section className="w-[60vw] mx-auto">
-      {/* Menu Header & Search Bar */}
+
       <div className="mb-6 flex flex-col gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-800">Menu</h2>
@@ -77,7 +77,7 @@ const Menu = () => {
           </span>
         </div>
 
-        {/* Menu Search Input */}
+
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <input
@@ -97,7 +97,7 @@ const Menu = () => {
           )}
         </div>
 
-        {/* Menu Filter Chips */}
+
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <button
             onClick={() => setVegOnly(!vegOnly)}

@@ -14,7 +14,6 @@ const ItemsContainer = () => {
 
   const handleItemClick = (item: FoodItems) => {
     if (currentItemId === item._id || currentSearch === item.title) {
-      // Clear selection if already selected
       navigate(`/customer/restaurants`);
     } else {
       navigate(`/customer/restaurants?search=${encodeURIComponent(item.title)}&item=${item._id}`);

@@ -15,3 +15,6 @@ export const AddRestaurant = (formData : AddRestaurantPayload)=>{
     return authApi.post("/api/admin/restaurants", formData)
 
 }
+export const addItem = (resId : string, formData :itemData)=>{
+    return authApi.post(`/api/admin/restaurants/${resId}/menu/add`,formData);
+}

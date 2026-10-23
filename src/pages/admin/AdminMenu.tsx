@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { useNavigate } from "react-router-dom";
 import AdminItemCard from "@/components/admin/AdminItemCards";
+import { UtensilsCrossed } from "lucide-react";
 
 const AdminMenu = () => {
   const navigate = useNavigate();
@@ -32,14 +33,55 @@ const AdminMenu = () => {
     }
   }, [restaurantId]);
   return restaurantId ? (
-    <section className=" w-[60vw] mx-auto ">
-      <div className="mb-5 flex items-center justify-between my-5  ">
-        <section className="flex items-center gap-5">
-          <h2 className="text-2xl font-bold ">Menu</h2>
-          <span className="text-sm text-gray-500">
-            ({menuData.length} items)
-          </span>
-        </section>
+    menuData.length > 0 ? (
+      <section className=" w-[60vw] mx-auto ">
+        <div className="mb-5 flex items-center justify-between my-5  ">
+          <section className="flex items-center gap-5">
+            <h2 className="text-2xl font-bold ">Menu</h2>
+            <span className="text-sm text-gray-500">
+              ({menuData.length} items)
+            </span>
+          </section>
+          <button
+            className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+            onClick={() => navigate(`/admin/menu/items?`)}
+          >
+            Add Item
+          </button>
+        </div>
+
+        <Accordion
+          defaultValue={["item-1"]}
+          className="w-[90%] mx-auto shadow-md px-2 rounded-xl"
+        >
+          <AccordionItem value="item-1">
+            <AccordionTrigger className=" text-2xl font-bold flex items-center gap-5">
+              <h2 className="text-2xl font-bold"> All Items</h2>
+              <span className="text-sm text-gray-500">
+                ({menuData.length} items)
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col">
+                {menuData.map((item) => (
+                  <AdminItemCard
+                    key={item._id}
+                    data={item}
+                    onItemUpdated={fetchMenu}
+                  />
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </section>
+    ) : (
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed p-12 text-center">
+        <UtensilsCrossed className="size-10 text-muted-foreground" />
+        <h3 className="font-semibold">No menu items yet</h3>
+        <p className="text-sm text-muted-foreground">
+          Use Add New Item to create your first dish.
+        </p>
         <button
           className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-600"
           onClick={() => navigate(`/admin/menu/items?`)}
@@ -47,32 +89,7 @@ const AdminMenu = () => {
           Add Item
         </button>
       </div>
-
-      <Accordion
-        defaultValue={["item-1"]}
-        className="w-[90%] mx-auto shadow-md px-2 rounded-xl"
-      >
-        <AccordionItem value="item-1">
-          <AccordionTrigger className=" text-2xl font-bold flex items-center gap-5">
-            <h2 className="text-2xl font-bold"> All Items</h2>
-            <span className="text-sm text-gray-500">
-              ({menuData.length} items)
-            </span>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="flex flex-col">
-              {menuData.map((item) => (
-                <AdminItemCard
-                  key={item._id}
-                  data={item}
-                  onItemUpdated={fetchMenu}
-                />
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </section>
+    )
   ) : (
     <main>
       <div> add your restaurant to get started</div>
