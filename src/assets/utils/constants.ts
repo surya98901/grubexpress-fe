@@ -255,3 +255,29 @@ export const reservationList = [
     value: "2 guests",
   },
 ];
+export const cuisineOptions = [
+  "South Indian",
+  "North Indian",
+  "Chinese",
+  "Italian",
+  "Continental",
+  "Biryani",
+  "Fast Food",
+  "Desserts",
+  "Cafe",
+  "Other",
+];
+
+export const initialRestarantForm = {
+  name: "",
+  description: "",
+  cusine: [] as string[],
+  FSSAID: "",
+  vegOnly: false,
+  opensAt: "09:00",
+  closesAt: "22:00",
+  addressLine: "",
+  city: "",
+  state: "",
+  pincode: "",
+};

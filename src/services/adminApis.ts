@@ -1,6 +1,7 @@
 
 import {authApi }from "./api";
 import type {itemData} from "@/types/items"
+import type { AddRestaurantPayload } from "@/types/AddRestaurantPayload";
 export const getAdminRestaurents = ()=>{
     return authApi.get("/api/admin/restaurants");
 }
@@ -9,4 +10,8 @@ export const editItemDetails = (resId : string, itemId:string, formData :itemDat
 }
 export const getAdminOrders = (resId : string)=>{
     return authApi.get(`/api/admin/restaurants/${resId}/orders`);
+}
+export const AddRestaurant = (formData : AddRestaurantPayload)=>{
+    return authApi.post("/api/admin/restaurants", formData)
+
 }

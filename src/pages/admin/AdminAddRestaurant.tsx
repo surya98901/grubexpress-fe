@@ -1,12 +1,9 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Clock,
   MapPin,
   Store,
   Utensils,
@@ -26,141 +23,23 @@ import {
   FieldSet,
   FieldLegend,
 } from "@/components/ui/field";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
-const cuisineOptions = [
-  "South Indian",
-  "North Indian",
-  "Chinese",
-  "Italian",
-  "Continental",
-  "Biryani",
-  "Fast Food",
-  "Desserts",
-  "Cafe",
-  "Other",
-];
+import TimePicker from "@/components/genericUIcomponents/pickers/TimePicker";
+import { cuisineOptions, initialRestarantForm } from "@/assets/utils/constants";
+import NewRestaurantAlert from "@/components/genericUIcomponents/Alerts/NewRestaurantAlert";
+import useAddRestaurant from "@/hooks/use-addRestaurant";
 
-const initialForm = {
-  name: "",
-  description: "",
-  cusine: [] as string[],
-  FSSAID: "",
-  vegOnly: false,
-  opensAt: "09:00",
-  closesAt: "22:00",
-  addressLine: "",
-  city: "",
-  state: "",
-  pincode: "",
-};
 
-type FormData = typeof initialForm;
-
+type FormData = typeof initialRestarantForm;
 const steps = [
   { title: "Restaurant details", description: "Basic information", icon: Store },
   { title: "Food & location", description: "Cuisine, hours and address", icon: MapPin },
   { title: "Review & create", description: "Confirm your details", icon: Check },
 ];
 
-function TimePicker({
-  value,
-  onChange,
-  label,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-  label: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const [hour, setHour] = useState(value.split(":")[0] || "09");
-  const [minute, setMinute] = useState(value.split(":")[1] || "00");
-
-  const confirm = () => {
-    onChange(`${hour}:${minute}`);
-    setOpen(false);
-  };
-
-  return (
-    <Popover
-      open={open}
-      onOpenChange={(nextOpen) => {
-        if (nextOpen) {
-          setHour(value.split(":")[0] || "09");
-          setMinute(value.split(":")[1] || "00");
-        }
-        setOpen(nextOpen);
-      }}
-    >
-      <PopoverTrigger >
-        <Button
-          type="button"
-          variant="outline"
-          className="h-11 w-full justify-start gap-2 font-normal"
-        >
-          <Clock className="size-4 text-muted-foreground" />
-          {value || label}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-64 space-y-4">
-        <p className="font-medium">{label}</p>
-        <div className="flex items-center gap-3">
-          <div className="flex-1 space-y-2">
-            <Label>Hour</Label>
-            <select
-              value={hour}
-              onChange={(e) => setHour(e.target.value)}
-              className="h-11 w-full rounded-md border bg-background px-2"
-            >
-              {Array.from({ length: 24 }, (_, i) => (
-                <option key={i} value={String(i).padStart(2, "0")}>
-                  {String(i).padStart(2, "0")}
-                </option>
-              ))}
-            </select>
-          </div>
-          <span className="mt-6 text-xl">:</span>
-          <div className="flex-1 space-y-2">
-            <Label>Minute</Label>
-            <select
-              value={minute}
-              onChange={(e) => setMinute(e.target.value)}
-              className="h-11 w-full rounded-md border bg-background px-2"
-            >
-              {Array.from({ length: 60 }, (_, i) => (
-                <option key={i} value={String(i).padStart(2, "0")}>
-                  {String(i).padStart(2, "0")}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <Button type="button" className="w-full" onClick={confirm}>
-          Confirm time
-        </Button>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
 const AdminAddRestaurant = () => {
-  const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<FormData>({ ...initialForm });
+  const [form, setForm] = useState<FormData>({ ...initialRestarantForm });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [created, setCreated] = useState(false);
@@ -242,52 +121,21 @@ const AdminAddRestaurant = () => {
     setStep(targetStep);
   };
 
-  const createRestaurant = async () => {
-    setSubmitting(true);
+  const postData = useAddRestaurant(form);
 
-    try {
-      const response = await fetch("/api/admin/restaurants", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          description: form.description.trim(),
-          address: {
-            label: "Restaurant",
-            addressLine: form.addressLine.trim(),
-            city: form.city.trim(),
-            state: form.state.trim(),
-            pincode: form.pincode,
-          },
-          cusine: form.cusine,
-          FSSAID: form.FSSAID.trim(),
-          opensAt: form.opensAt,
-          closesAt: form.closesAt,
-          vegOnly: form.vegOnly,
-        }),
-      });
+const createRestaurant = async () => {
+  setSubmitting(true);
 
-      const result = await response.json();
+  try {
+    const result = await postData();
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Could not create restaurant.");
-      }
-
+    if (result.success) {
       setCreated(true);
-      toast.success("Restaurant created successfully!");
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong.",
-      );
-    } finally {
-      setSubmitting(false);
     }
-  };
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
@@ -704,36 +552,7 @@ const AdminAddRestaurant = () => {
         Step {step + 1} of {steps.length} · Your information stays in this form
         as you move between steps.
       </p>
-
-      <AlertDialog
-        open={created}
-        onOpenChange={(open) => {
-          if (!open) setCreated(false);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Restaurant created successfully!
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {form.name} is ready. Would you like to add menu items now, or
-              explore your admin dashboard?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="flex-col sm:flex-row">
-            <AlertDialogCancel
-              onClick={() => navigate("/admin/dashboard")}
-            >
-              Explore dashboard
-            </AlertDialogCancel>
-            <AlertDialogAction onClick={() => navigate("/admin/menu")}>
-              <Utensils className="mr-2 size-4" />
-              Add menu items
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <NewRestaurantAlert created = {created} setCreated={setCreated} name={form.name}/>
     </div>
   );
 };
