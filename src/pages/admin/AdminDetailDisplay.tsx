@@ -32,7 +32,7 @@ const AdminDetailDisplay = () => {
         </section>
         <DatePicker/>
       </div>
-      <AdminTable tableType={type} tableData={[]} />
+      <AdminTable tableType={type}/>
       
     </div>
   ): ( <main>

@@ -16,3 +16,12 @@ export interface itemData {
   available : boolean;
   foodItemId :string;
 }
+export interface editItemData {
+  title: string;
+  description: string;
+  serves: number;
+  price: number;
+  cusine: string;
+  category: string;
+  type: string;
+}

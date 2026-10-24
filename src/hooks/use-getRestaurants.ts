@@ -79,7 +79,3 @@ export const useGetRestaurants = ({
     hasMore,
   };
 };
-
-export const useGetRestaurantById = (id: string)=>{
-
-}

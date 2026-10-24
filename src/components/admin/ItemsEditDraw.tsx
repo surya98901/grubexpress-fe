@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { cusines, categories, foodTypes } from "@/assets/utils/constants";
 import { Check, IndianRupee, Users } from "lucide-react";
-import type { itemData } from "@/types/items";
+import type { editItemData, itemData } from "@/types/items";
 import type { menuItems } from "@/types/menuItem";
 import useEditItemDetails from "@/hooks/use-editItemDetails";
 import { useSelector } from "react-redux";
@@ -35,7 +35,7 @@ const ItemEditDraw = ({
   const restaurantId = useSelector(
     (state: RootState) => state.user.RestaurantId,
   );
-  const [formData, setFormData] = useState<itemData>({
+  const [formData, setFormData] = useState<editItemData>({
     title: "",
     description: "",
     serves: 0,

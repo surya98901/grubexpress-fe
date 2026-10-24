@@ -1,12 +1,13 @@
 import { editItemDetails } from "@/services/adminApis";
-import type { itemData } from "@/types/items";
+import type { editItemData} from "@/types/items";
 import axios from "axios";
+
 const useEditItemDetails = (
   resId: string,
   itemId: string,
-  formData: itemData,
+  formData: editItemData ,
 ) => {
-    
+  
   const editItems = async () => {
     try {
       await editItemDetails(resId, itemId, formData);

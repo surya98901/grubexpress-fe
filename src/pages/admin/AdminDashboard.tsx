@@ -14,8 +14,8 @@ const AdminDashboard = () => {
       <div className="flex min-w-0 gap-5">
         <div className="min-w-0 flex-1 space-y-5">
          <AdminResBanner /> 
-         <AdminTable tableType = "orders" tableData={[]}/>
-         <AdminTable tableType = "reservations" tableData={[]}/>
+         <AdminTable tableType = "orders"/>
+         <AdminTable tableType = "reservations"/>
         </div>
         <AdminServiceUpdates/>
       </div>

@@ -50,21 +50,21 @@ const AdminNavBar = () => {
   }, []);
   return (
     <div className="navbar flex justify-between items-center p-4 bg-green-700 text-white px-4">
-      <h1 className="flex gap-5 items-center">
+      <section className="flex items-center justify-between w-[20vw] mx-10 ">
         <Link to="/admin/home" className="text-xl font-bold">
-          Grub Express
+          <img src="/Grub Express Cartoon Train.png" alt="" className="w-[200px]"/>
         </Link>
         <span> Welcome, {userName}</span>
-      </h1>
+      </section>
       <nav className="flex ">
         <section className="flex justify-between items-center gap-4 px-4">
-          <NativeSelect
+          {!loading && <NativeSelect
           value={selectedRestaurant || ""}
           onChange={(e)=>handleRestaurantSelection(e.target.value)}>
             {restaurantData?.map((item) => (
               <NativeSelectOption key ={item._id}  value={item._id}>{item.Name}</NativeSelectOption>
             ))}
-          </NativeSelect>
+          </NativeSelect>}
           <Bell />
           <UserRound />
         </section>

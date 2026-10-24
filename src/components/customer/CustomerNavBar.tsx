@@ -17,9 +17,9 @@ const CustomerNavBar = () => {
   }, []);
   return (
     <div className="navbar flex justify-between items-center p-4 bg-green-700 text-white px-50">
-      <h1 className="text-xl font-bold">
-        <Link to="/">Grub Express</Link>
-      </h1>
+
+        <img src="/Grub Express Cartoon Train.png" alt="" className="w-[200px]"/>
+
       <nav className="flex ">
         {!userName ? (
           <ul className="flex justify-between items-center gap-4 px-4">
