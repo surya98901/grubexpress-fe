@@ -11,6 +11,9 @@ export const editItemDetails = (resId : string, itemId:string, formData :editIte
 export const getAdminOrders = (resId : string)=>{
     return authApi.get(`/api/admin/restaurants/${resId}/orders`);
 }
+export const getAdminReservations = (resId : string)=>{
+    return authApi.get(`/api/admin/restaurants/${resId}/reservations`);
+}
 export const AddRestaurant = (formData : AddRestaurantPayload)=>{
     return authApi.post("/api/admin/restaurants", formData)
 

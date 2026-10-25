@@ -1,8 +1,8 @@
 import { Leaf, Ham } from "lucide-react";
 import Rating from "@/components/genericUIcomponents/rating";
-
+import { Switch } from "@/components/ui/switch";
 import ItemEditDraw from "./ItemsEditDraw";
-
+//menuCard
 const AdminItemCard = ({
   data,
   onItemUpdated,
@@ -12,7 +12,7 @@ const AdminItemCard = ({
 }) => {
   const isVeg = data.type === "veg";
   return (
-    <div className="group flex min-h-[180px] justify-between gap-6 border-b border-gray-200 py-5">
+    <div className="group flex min-h-[180px] justify-between gap-6 border-b border-gray-200 py-5 px-5">
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div>
           <div className="flex items-center gap-3">
@@ -44,6 +44,13 @@ const AdminItemCard = ({
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
             {data.description}
           </p>
+          <section className=" flex items-center gap-2">
+            <div className=" m-0 flex items-center gap-2 ">
+              Available
+              <Switch />
+            </div>
+            <button className="bg-red-400 rounded-xl p-1 px-2 text-sm text-white flex ">Remove</button>
+          </section>
         </div>
       </div>
 

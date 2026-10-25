@@ -1,15 +1,20 @@
+
 import { useMemo, useState } from "react";
-import AdminlistCard from "@/components/admin/AdminlistCards";
 import { ClipboardList, Utensils, RotateCw } from "lucide-react";
-import useGetAdminOrders from "@/hooks/use-getAdminOrders";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { dineInStatuses, orderStatuses } from "@/assets/utils/constants";
+import useGetAdminOrders from "@/hooks/use-getAdminOrders";
+import useGetAdminReservations from "@/hooks/use-getAdminResevations";
+import AdminOrdersListCard from "./AdminOrdersListCard";
+import AdminReservationsCard from "./AdminReservationsCard";
 
 type ServiceType = "orders" | "dineins";
 
 const AdminServiceUpdates = () => {
   const [selectService, setSelectService] = useState<ServiceType>("orders");
+  const [open, setOpen] = useState<string | null>(null);
+
   const restaurantId = useSelector(
     (state: RootState) => state.user.RestaurantId,
   );
@@ -17,96 +22,96 @@ const AdminServiceUpdates = () => {
   const isOrders = selectService === "orders";
   const statusList = isOrders ? orderStatuses : dineInStatuses;
 
-  const { orderData, loading} = useGetAdminOrders(
+  const { orderData, orderLoading } = useGetAdminOrders(
     isOrders ? restaurantId : null,
   );
 
-  // Flatten items while including order-level metadata
-  const displayedItems = useMemo(() => {
-    if (!isOrders || !orderData) return [];
+  const { reservationData, reservationLoading } = useGetAdminReservations(
+    isOrders ? null : restaurantId,
+  );
 
-    return orderData.flatMap((order) =>
-      order.items.map((item) => ({
-        ...item,
-        orderId: order._id,
-        orderStatus: order.orderStatus,
-        createdAt: order.createdAt,
-      })),
-    );
-  }, [orderData, isOrders]);
+  const loading = isOrders ? orderLoading : reservationLoading;
+  const totalCount = isOrders
+    ? (orderData?.length ?? 0)
+    : (reservationData?.length ?? 0);
 
-  // Single-pass count lookup
   const statusCounts = useMemo(() => {
-    if (!isOrders || !orderData)
-      return { New: 0, Preparation: 0, "Out for Delivery": 0 };
+    if (isOrders) {
+      return {
+        New: orderData?.filter((order) => order.orderStatus === "PLACED").length ?? 0,
+        Preparation: orderData?.filter((order) => order.orderStatus === "PREPARING").length ?? 0,
+        "Out for Delivery": orderData?.filter((order) => order.orderStatus === "OUT_FOR_DELIVERY").length ?? 0,
+      };
+    }
 
-    return orderData.reduce(
-      (acc, order) => {
-        if (order.orderStatus === "PLACED") acc.New += 1;
-        else if (order.orderStatus === "PREPARING") acc.Preparation += 1;
-        else if (order.orderStatus === "OUT_FOR_DELIVERY")
-          acc["Out for Delivery"] += 1;
-        return acc;
-      },
-      { New: 0, Preparation: 0, "Out for Delivery": 0 },
-    );
-  }, [orderData, isOrders]);
+    return {
+      New: reservationData?.filter((res) => res.status === "PLACED").length ?? 0,
+      Confirmed: reservationData?.filter((res) => res.status === "CONFIRMED").length ?? 0,
+      Reserved: reservationData?.filter((res) => res.status === "RESERVED").length ?? 0,
+    };
+  }, [isOrders, orderData, reservationData]);
+
+  const handleServiceChange = (service: ServiceType) => {
+    setSelectService(service);
+    setOpen(null);
+  };
 
   return (
     <aside className="w-full max-w-[360px] shrink-0 space-y-5">
-      {/* Service Switcher Buttons */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
-          onClick={() => setSelectService("orders")}
-          className={`flex items-center gap-3 rounded-2xl border px-4 text-left transition-all duration-200 ${
+          aria-pressed={isOrders}
+          onClick={() => handleServiceChange("orders")}
+          className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${
             isOrders
-              ? "border-yellow-400 bg-yellow-400 shadow-md"
-              : "border-gray-200 bg-white hover:-translate-y-0.5 hover:border-yellow-300 hover:shadow-md"
+              ? "border-amber-400 bg-amber-400 shadow-md"
+              : "border-gray-200 bg-white hover:border-amber-300 hover:shadow-md"
           }`}
         >
           <div
             className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-              isOrders ? "bg-white" : "bg-yellow-100"
+              isOrders ? "bg-white" : "bg-amber-100"
             }`}
           >
-            <ClipboardList className="h-5 w-5 text-yellow-700" />
+            <ClipboardList className="h-5 w-5 text-amber-700" />
           </div>
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {orderData?.length || 0}
-            </p>
+          <div className="min-w-0">
+            <p className="text-2xl font-bold text-gray-900">{orderData?.length ?? 0}</p>
             <span className="text-sm text-gray-600">Orders</span>
           </div>
         </button>
 
         <button
           type="button"
-          onClick={() => setSelectService("dineins")}
+          aria-pressed={!isOrders}
+          onClick={() => handleServiceChange("dineins")}
           className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${
             !isOrders
-              ? "border-green-500 bg-green-500 shadow-md"
-              : "border-gray-200 bg-white hover:-translate-y-0.5 hover:border-green-300 hover:shadow-md"
+              ? "border-emerald-500 bg-emerald-500 shadow-md"
+              : "border-gray-200 bg-white hover:border-emerald-300 hover:shadow-md"
           }`}
         >
           <div
             className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-              !isOrders ? "bg-white" : "bg-green-100"
+              !isOrders ? "bg-white" : "bg-emerald-100"
             }`}
           >
-            <Utensils className="h-5 w-5 text-green-700" />
+            <Utensils className="h-5 w-5 text-emerald-700" />
           </div>
-          <div>
-            <p className="text-2xl font-bold text-gray-900">0</p>
-            <span className="text-sm text-gray-600">Dine-ins</span>
+          <div className="min-w-0">
+            <p className="text-2xl font-bold text-gray-900">
+              {reservationData?.length ?? 0}
+            </p>
+            <span className="text-sm text-gray-600">Reservations</span>
           </div>
         </button>
       </div>
 
-      {/* Status Counters */}
       <section className="grid grid-cols-3 gap-3">
         {statusList.map((status) => {
           const Icon = status.icon;
+
           return (
             <div
               key={status.name}
@@ -117,11 +122,9 @@ const AdminServiceUpdates = () => {
               >
                 <Icon className="h-4 w-4 text-white" />
               </div>
-
               <p className="text-xl font-bold text-gray-900">
                 {statusCounts[status.name as keyof typeof statusCounts] ?? 0}
               </p>
-
               <span className="text-xs font-medium text-gray-500">
                 {status.name}
               </span>
@@ -130,38 +133,64 @@ const AdminServiceUpdates = () => {
         })}
       </section>
 
-  
-
-      <section className="flex max-h-[100vh] min-h-[80vh] flex-col rounded-2xl bg-gray-200 p-3">
-        <div className="my-2 flex shrink-0 items-center justify-between px-3">
-          <div>
+      <section className="flex max-h-[100vh] min-h-[80vh] flex-col rounded-2xl border border-gray-100 bg-gray-50 p-3">
+        <div className="my-2 flex shrink-0 items-center justify-between gap-2 px-3">
+          <div className="min-w-0">
             <h3 className="font-semibold text-gray-900">
               {isOrders ? "Today's Orders" : "Today's Reservations"}
             </h3>
             <p className="mt-0.5 text-xs text-gray-500">
-              {isOrders
-                ? "Recent order activity"
-                : "Recent reservation activity"}
+              {isOrders ? "Manage incoming orders" : "Manage table reservations"}
             </p>
           </div>
 
-          <button
-            type="button"
-            className="rounded-lg p-1 text-gray-500 transition hover:bg-white hover:text-gray-900"
-          >
-            <RotateCw className="h-5 w-5" />
-          </button>
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-600">
+            {totalCount} total
+          </span>
         </div>
 
-        <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-1">
-          {displayedItems.length > 0 ? (
-            displayedItems.map((item) => (
-              <AdminlistCard key={item.menuItemId} list={item} />
+        <div className="mt-2 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-12">
+              <RotateCw className="h-5 w-5 animate-spin text-gray-400" />
+              <p className="text-sm text-gray-500">Loading {isOrders ? "orders" : "reservations"}...</p>
+            </div>
+          ) : isOrders ? (
+            orderData?.length ? (
+              orderData.map((item) => (
+                <AdminOrdersListCard
+                  key={item._id}
+                  data={item}
+                  open={open}
+                  setOpen={setOpen}
+                />
+              ))
+            ) : (
+              <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-4 py-10 text-center">
+                <ClipboardList className="mx-auto mb-3 h-8 w-8 text-gray-300" />
+                <p className="font-medium text-gray-700">No orders found</p>
+                <p className="mt-1 text-xs text-gray-400">
+                  New orders will appear here.
+                </p>
+              </div>
+            )
+          ) : reservationData?.length ? (
+            reservationData.map((res) => (
+              <AdminReservationsCard
+                key={res._id}
+                data={res}
+                open={open}
+                setOpen={setOpen}
+              />
             ))
           ) : (
-            <p className="py-8 text-center text-sm text-gray-500">
-              {loading ? "Loading..." : "No items found"}
-            </p>
+            <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-4 py-10 text-center">
+              <Utensils className="mx-auto mb-3 h-8 w-8 text-gray-300" />
+              <p className="font-medium text-gray-700">No reservations found</p>
+              <p className="mt-1 text-xs text-gray-400">
+                New reservations will appear here.
+              </p>
+            </div>
           )}
         </div>
       </section>
