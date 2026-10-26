@@ -36,6 +36,6 @@ export const placeOrder = ()=>{
 export const getOrders = ()=>{
     return authApi.get("/api/user/order");
 }
-export const getPayment = (orderId:String)=>{
+export const getPayment = (orderId:string)=>{
     return authApi.get(`/api/payment/${orderId}`)
 }

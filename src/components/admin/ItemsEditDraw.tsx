@@ -20,7 +20,7 @@ import { cusines, categories, foodTypes } from "@/assets/utils/constants";
 import { Check, IndianRupee, Users } from "lucide-react";
 import type { editItemData, itemData } from "@/types/items";
 import type { menuItems } from "@/types/menuItem";
-import useEditItemDetails from "@/hooks/use-editItemDetails";
+import useEditItemDetails from "@/hooks/AdminHooks/use-editItemDetails";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 

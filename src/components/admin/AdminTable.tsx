@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { EllipsisVertical } from "lucide-react";
 import { orderTable, reservationTable } from "@/assets/utils/constants";
-import useGetAdminOrders from "@/hooks/use-getAdminOrders";
+import useGetAdminOrders from "@/hooks/AdminHooks/use-getAdminOrders";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 

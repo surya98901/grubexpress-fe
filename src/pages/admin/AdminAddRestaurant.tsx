@@ -27,7 +27,7 @@ import {
 import TimePicker from "@/components/genericUIcomponents/pickers/TimePicker";
 import { cuisineOptions, initialRestarantForm } from "@/assets/utils/constants";
 import NewRestaurantAlert from "@/components/genericUIcomponents/Alerts/NewRestaurantAlert";
-import useAddRestaurant from "@/hooks/use-addRestaurant";
+import useAddRestaurant from "@/hooks/AdminHooks/use-addRestaurant";
 
 
 type FormData = typeof initialRestarantForm;

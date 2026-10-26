@@ -1,5 +1,6 @@
 import { Calendar, Clock, SquareText, Tag, Users } from "lucide-react";
-const AdminDineInCard = ({data}: {data: any}) => {
+import { formatDate } from "@/assets/utils/helpers";
+const AdminDineInDetailsCard = ({data}: {data: any}) => {
   return (
     <div className="flex flex-col gap-2 overflow-y-auto h-max-[40vh] hide-scrollbar">
       <section className="grid grid-cols-2 gap-4">
@@ -45,7 +46,7 @@ const AdminDineInCard = ({data}: {data: any}) => {
           <Clock className="w-[25px]" />
           <div className="flex flex-col ">
             <p className="text-[10px] text-gray-400">Booked At</p>
-            <p className="font-bold text-sm">{data.createdAt}</p>
+            <p className="font-bold text-sm">{formatDate(data.createdAt)}</p>
           </div>
         </div>
         <div className=" flex gap-2 items-center">
@@ -61,4 +62,4 @@ const AdminDineInCard = ({data}: {data: any}) => {
     </div>
   );
 };
-export default AdminDineInCard;
+export default AdminDineInDetailsCard;

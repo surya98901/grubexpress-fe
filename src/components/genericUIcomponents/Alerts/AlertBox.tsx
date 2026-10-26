@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import useSignOut from "@/hooks/useSignOut";
+import useSignOut from "@/hooks/authHooks/useSignOut";
 
 
 export const SignOutAlert = ({

@@ -20,6 +20,7 @@ import AdminAddItem from "@/pages/admin/AdminItems";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminAddRestaurant from "./pages/admin/AdminAddRestaurant";
+import AdminRoute from "./components/admin/AdminRoute";
 
 function App() {
   return (
@@ -36,10 +37,14 @@ function App() {
         <Route path="/customer/orders" element={<Orders />} />
         <Route path="/customer/profile" element={<Profile />} />
         <Route path="/customer/checkout" element={<Checkout />} />
-        <Route path="/customer/secure/payments" element={<div> payment gateway secure %%</div>} />
+        <Route
+          path="/customer/secure/payments"
+          element={<div> payment gateway secure %%</div>}
+        />
       </Route>
+      <Route  element={<AdminRoute/>}>
       <Route path="/admin" element={<AdminLayout />}>
-      <Route path="/admin" element={<AdminHome />} />
+        <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/services" element={<AdminDetailDisplay />} />
@@ -49,6 +54,7 @@ function App() {
         <Route path="/admin/settings" element={<AdminSettings />} />
         <Route path="/admin/add-restaurant" element={<AdminAddRestaurant />} />
         <Route path="/admin/profile" element={<Profile />} />
+      </Route>
       </Route>
     </Routes>
   );

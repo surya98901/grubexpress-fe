@@ -281,3 +281,10 @@ export const initialRestarantForm = {
   state: "",
   pincode: "",
 };
+ export const activeOrderStatuses = [
+  "PLACED",
+    "CONFIRMED",
+    "PREPARING",
+    "READY",
+    "OUT_FOR_DELIVERY",
+  ];

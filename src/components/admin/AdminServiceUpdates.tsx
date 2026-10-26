@@ -4,8 +4,8 @@ import { ClipboardList, Utensils, RotateCw } from "lucide-react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { dineInStatuses, orderStatuses } from "@/assets/utils/constants";
-import useGetAdminOrders from "@/hooks/use-getAdminOrders";
-import useGetAdminReservations from "@/hooks/use-getAdminResevations";
+import useGetAdminOrders from "@/hooks/AdminHooks/use-getAdminOrders";
+import useGetAdminReservations from "@/hooks/AdminHooks/use-getAdminResevations";
 import AdminOrdersListCard from "./AdminOrdersListCard";
 import AdminReservationsCard from "./AdminReservationsCard";
 
@@ -14,6 +14,8 @@ type ServiceType = "orders" | "dineins";
 const AdminServiceUpdates = () => {
   const [selectService, setSelectService] = useState<ServiceType>("orders");
   const [open, setOpen] = useState<string | null>(null);
+  const [dismissedOrderIds, setDismissedOrderIds] = useState<string[]>([]);
+  const [dismissedReservationIds, setDismissedReservationIds] = useState<string[]>([]);
 
   const restaurantId = useSelector(
     (state: RootState) => state.user.RestaurantId,
@@ -31,9 +33,22 @@ const AdminServiceUpdates = () => {
   );
 
   const loading = isOrders ? orderLoading : reservationLoading;
+
+  const visibleOrders = (orderData ?? []).filter(
+    (order) =>
+      order.orderStatus === "PLACED" &&
+      !dismissedOrderIds.includes(order._id),
+  );
+
+  const visibleReservations = (reservationData ?? []).filter(
+    (reservation) =>
+      reservation.status === "PLACED" &&
+      !dismissedReservationIds.includes(reservation._id),
+  );
+
   const totalCount = isOrders
-    ? (orderData?.length ?? 0)
-    : (reservationData?.length ?? 0);
+    ? visibleOrders.length
+    : visibleReservations.length;
 
   const statusCounts = useMemo(() => {
     if (isOrders) {
@@ -53,6 +68,20 @@ const AdminServiceUpdates = () => {
 
   const handleServiceChange = (service: ServiceType) => {
     setSelectService(service);
+    setOpen(null);
+  };
+
+  const handleOrderStatusUpdated = (id: string) => {
+    setDismissedOrderIds((prev) =>
+      prev.includes(id) ? prev : [...prev, id],
+    );
+    setOpen(null);
+  };
+
+  const handleReservationStatusUpdated = (id: string) => {
+    setDismissedReservationIds((prev) =>
+      prev.includes(id) ? prev : [...prev, id],
+    );
     setOpen(null);
   };
 
@@ -77,7 +106,9 @@ const AdminServiceUpdates = () => {
             <ClipboardList className="h-5 w-5 text-amber-700" />
           </div>
           <div className="min-w-0">
-            <p className="text-2xl font-bold text-gray-900">{orderData?.length ?? 0}</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {orderData?.length ?? 0}
+            </p>
             <span className="text-sm text-gray-600">Orders</span>
           </div>
         </button>
@@ -140,12 +171,14 @@ const AdminServiceUpdates = () => {
               {isOrders ? "Today's Orders" : "Today's Reservations"}
             </h3>
             <p className="mt-0.5 text-xs text-gray-500">
-              {isOrders ? "Manage incoming orders" : "Manage table reservations"}
+              {isOrders
+                ? "Manage incoming orders"
+                : "Manage table reservations"}
             </p>
           </div>
 
           <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-600">
-            {totalCount} total
+            {totalCount} pending
           </span>
         </div>
 
@@ -153,40 +186,46 @@ const AdminServiceUpdates = () => {
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-3 py-12">
               <RotateCw className="h-5 w-5 animate-spin text-gray-400" />
-              <p className="text-sm text-gray-500">Loading {isOrders ? "orders" : "reservations"}...</p>
+              <p className="text-sm text-gray-500">
+                Loading {isOrders ? "orders" : "reservations"}...
+              </p>
             </div>
           ) : isOrders ? (
-            orderData?.length ? (
-              orderData.map((item) => (
+            visibleOrders.length > 0 ? (
+              visibleOrders.map((item) => (
                 <AdminOrdersListCard
                   key={item._id}
                   data={item}
                   open={open}
                   setOpen={setOpen}
+                  onStatusUpdated={handleOrderStatusUpdated}
                 />
               ))
             ) : (
               <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-4 py-10 text-center">
                 <ClipboardList className="mx-auto mb-3 h-8 w-8 text-gray-300" />
-                <p className="font-medium text-gray-700">No orders found</p>
+                <p className="font-medium text-gray-700">No new orders</p>
                 <p className="mt-1 text-xs text-gray-400">
                   New orders will appear here.
                 </p>
               </div>
             )
-          ) : reservationData?.length ? (
-            reservationData.map((res) => (
+          ) : visibleReservations.length > 0 ? (
+            visibleReservations.map((res) => (
               <AdminReservationsCard
                 key={res._id}
                 data={res}
                 open={open}
                 setOpen={setOpen}
+                onStatusUpdated={handleReservationStatusUpdated}
               />
             ))
           ) : (
             <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-4 py-10 text-center">
               <Utensils className="mx-auto mb-3 h-8 w-8 text-gray-300" />
-              <p className="font-medium text-gray-700">No reservations found</p>
+              <p className="font-medium text-gray-700">
+                No new reservations
+              </p>
               <p className="mt-1 text-xs text-gray-400">
                 New reservations will appear here.
               </p>

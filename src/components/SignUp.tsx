@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import type { signUpData } from "@/types/AuthFormData";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useSignUp from "@/hooks/use-signUp";
+import useSignUp from "@/hooks/authHooks/use-signUp";
 import { signUpFormValidation } from "@/assets/utils/helpers";
 
 const SignUp = ({ userType }: { userType: string }) => {

@@ -2,18 +2,36 @@ import { formatDate } from "@/assets/utils/helpers";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import AdminlistCard from "./AdminlistCards";
-import { OrderCancelAlert } from "../genericUIcomponents/Alerts/OrderCancelAlert";
+import { DeclineRequestAlert } from "../genericUIcomponents/Alerts/DeclineRequestAlert";
+import useEditAdminOrder from "@/hooks/AdminHooks/use-editAdminOrder";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
 interface AdminOrdersListCard {
   data: any;
   open: string | null;
   setOpen: Dispatch<SetStateAction<string | null>>;
+   onStatusUpdated: (id: string) => void;
 }
 
-const AdminOrdersListCard = ({ data, open, setOpen }: AdminOrdersListCard) => {
+const AdminOrdersListCard = ({ data, open, setOpen ,onStatusUpdated}: AdminOrdersListCard) => {
   const displayedItems = data?.items ?? [];
+  const restaurantId = useSelector((state:RootState)=>state.user.RestaurantId)
   const [decline, setDecline] = useState<boolean>(false)
+const { editOrder, loading, error } = useEditAdminOrder(
+  restaurantId,
+  data._id,
+);
 
+const handleAccept = async () => {
+  const success = await editOrder("CONFIRMED");
+
+  if (success) {
+    onStatusUpdated(data._id)
+    setOpen(null);
+    // Refresh the orders list here.
+  }
+};
   return (
    <> <div className="group flex w-full flex-col gap-2 rounded-2xl bg-white p-4 text-gray-900 shadow-sm transition-all duration-300 hover:shadow-md">
       <div className="flex items-center justify-between gap-3">
@@ -69,8 +87,8 @@ const AdminOrdersListCard = ({ data, open, setOpen }: AdminOrdersListCard) => {
             <button
               type="button"
               className="rounded-lg bg-emerald-600 px-2 py-1 text-[10px] font-semibold text-white transition-all hover:bg-emerald-700 active:scale-95"
-            >
-              Accept
+              onClick= {handleAccept}>
+              {loading ? "Updating..." : "Accept"}
             </button>
             <button
               type="button"
@@ -82,7 +100,7 @@ const AdminOrdersListCard = ({ data, open, setOpen }: AdminOrdersListCard) => {
         </section>
       </div>
     </div>
-    <OrderCancelAlert open={decline} setOpen={setDecline}/>
+    <DeclineRequestAlert open={decline} setOpen={setDecline} id = {data._id}/>
    </>
   );
 };

@@ -1,26 +1,31 @@
 
 import type { OrderDetails } from "@/types/order";
+import type { Restaurant } from "@/types/restaurant";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState, useEffect } from "react";
-import type { Restaurant } from "@/types/restaurant";
-import type { PaymentDetails } from "@/types/payment";
+import { useState, useEffect, useRef } from "react";
 import Draw from "@/components/orders/OrderDetailsDraw";
 import { useNavigate } from "react-router-dom";
 import { getRestaurant } from "@/services/restaurantApi";
-import { getPayment } from "@/services/userApi";
+import OrderDetailsAccordian from "./OrderDetailsAccordian";
+import OrderTag from "./OrderTag";
+import useGetPayment from "@/hooks/use-getPaymentStatus";
 
 const OrderCards = ({ data }: { data: OrderDetails }) => {
-  const [restaurantData, setRestaurantData] = useState<Restaurant | null>(
-    null
-  );
-  const [payment, setPayment] = useState<PaymentDetails | null>(null);
+  const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);
   const [timer, setTimer] = useState<number>(0);
   const navigate = useNavigate();
+
+  const {
+    payment,
+    refetch: refetchPayment,
+  } = useGetPayment(data._id);
+
+  const expiryCheckedFor = useRef<string | null>(null);
 
   useEffect(() => {
     if (!payment || payment.paymentStatus !== "PENDING") {
@@ -30,55 +35,68 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
 
     const updateTimer = () => {
       const expiry = new Date(payment.expiresAt).getTime();
-      const remaining = Math.max(0, expiry - Date.now());
-      setTimer(remaining);
+      setTimer(Math.max(0, expiry - Date.now()));
     };
 
     updateTimer();
+
     const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
   }, [payment]);
 
   useEffect(() => {
+    if (
+      timer !== 0 ||
+      payment?.paymentStatus !== "PENDING" ||
+      data.orderStatus !== "PLACED" ||
+      expiryCheckedFor.current === data._id
+    ) {
+      return;
+    }
+
+    expiryCheckedFor.current = data._id;
+    void refetchPayment();
+  }, [
+    timer,
+    payment?.paymentStatus,
+    data.orderStatus,
+    data._id,
+    refetchPayment,
+  ]);
+
+  useEffect(() => {
     if (!data.restaurantId) return;
 
     let cancelled = false;
 
-    const fetchData = async () => {
+    const fetchRestaurant = async () => {
       try {
-        const [restaurantResponse, paymentResponse] = await Promise.all([
-          getRestaurant(data.restaurantId),
-          getPayment(data._id),
-        ]);
+        const response = await getRestaurant(data.restaurantId);
 
-        if (cancelled) return;
-
-        setRestaurantData(restaurantResponse.data.restaurant);
-        setPayment(paymentResponse.data.data);
+        if (!cancelled) {
+          setRestaurantData(response.data.restaurant);
+        }
       } catch (error) {
         if (!cancelled) {
-          console.error("Error fetching order details:", error);
+          console.error("Error fetching restaurant details:", error);
         }
       }
     };
 
-    fetchData();
+    void fetchRestaurant();
 
     return () => {
       cancelled = true;
     };
-  }, [data.restaurantId, data._id]);
+  }, [data.restaurantId]);
 
   const minutes = Math.floor(timer / 60000);
   const seconds = Math.floor((timer / 1000) % 60);
+
   const formattedTimer = `${String(minutes).padStart(2, "0")}:${String(
-    seconds
+    seconds,
   ).padStart(2, "0")}`;
-
-  const liveOrder = !["DELIVERED", "CANCELLED"].includes(data.orderStatus);
-
-  if (!liveOrder) return null;
 
   return (
     <Accordion className="mx-auto mt-5 w-full max-w-4xl rounded-xl border border-gray-200 bg-white px-3 shadow-sm sm:mt-8 sm:px-5">
@@ -89,35 +107,31 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
             alt={restaurantData?.Name || "Restaurant"}
             className="h-40 w-full rounded-xl object-cover shadow-sm sm:h-auto sm:w-36 sm:shrink-0 md:w-44"
           />
+
           <div className="flex min-w-0 flex-1 flex-col">
             <section className="flex flex-col gap-4 py-2 sm:flex-row sm:justify-between sm:gap-5">
               <div className="min-w-0">
                 <h3 className="break-words text-lg font-bold text-gray-900 sm:text-xl">
                   {restaurantData?.Name || "Loading restaurant..."}
                 </h3>
+
                 <p className="text-sm text-gray-500">
                   {restaurantData?.address?.city}
                 </p>
+
                 <p className="mt-1 break-all text-xs text-gray-500">
                   Order #{data._id}
                 </p>
+
                 <div className="mt-3">
                   <Draw data={data} resData={restaurantData} />
                 </div>
               </div>
 
               <div className="flex min-w-0 flex-col items-start gap-2 sm:min-w-[150px] sm:items-end">
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    data.orderStatus === "CANCELLED"
-                      ? "bg-red-50 text-red-600"
-                      : "bg-green-50 text-green-700"
-                  }`}
-                >
-                  {data.orderStatus}
-                </span>
+                <OrderTag status={data.orderStatus} />
 
-                {payment && (
+                {payment && data.orderStatus === "PLACED" && (
                   <>
                     {payment.paymentStatus !== "PENDING" ? (
                       <p className="text-sm text-gray-600 sm:text-right">
@@ -131,13 +145,12 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
 
                         <button
                           type="button"
-                          disabled={timer === 0}
                           className="w-full rounded-lg bg-green-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-gray-400 sm:w-auto"
                           onClick={() =>
                             navigate("/customer/secure/payments")
                           }
                         >
-                          {timer === 0 ? "Payment expired" : "Pay now"}
+                          Pay now
                         </button>
                       </div>
                     )}
@@ -150,47 +163,19 @@ const OrderCards = ({ data }: { data: OrderDetails }) => {
               <span className="min-w-0 break-words">
                 Items List ({data.items.length})
               </span>
-              <span className="ml-auto shrink-0">
-                ₹{data.totalAmount}
-              </span>
             </AccordionTrigger>
+
+            <section className="flex w-full items-center font-bold text-green-700">
+              <p>Total</p>
+              <p className="ml-auto shrink-0">₹{data.totalAmount}</p>
+            </section>
           </div>
         </div>
 
         <AccordionContent>
           <div className="flex flex-col gap-3 pb-3">
-            {data.items.map((item) => (
-              <div
-                key={item.menuItemId}
-                className="flex flex-col gap-3 rounded-lg border border-gray-100 bg-gray-50/70 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4"
-              >
-                <h3 className="break-words text-sm font-medium text-gray-800 sm:text-base">
-                  {item.title} <span className="text-gray-500">× {item.quantity}</span>
-                </h3>
-
-                <section className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    className="rounded-lg border border-green-700 px-3 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
-                  >
-                    Reorder
-                  </button>
-
-                  <button
-                    type="button"
-                    className="rounded-lg border border-green-700 px-3 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
-                  >
-                    Feedback
-                  </button>
-
-                  <button
-                    type="button"
-                    className="rounded-lg border border-green-700 px-3 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-700 hover:text-white"
-                  >
-                    Help
-                  </button>
-                </section>
-              </div>
+            {data.items.map((item, index) => (
+              <OrderDetailsAccordian key={index} data={item} />
             ))}
           </div>
         </AccordionContent>

@@ -1,4 +1,4 @@
-import { formatDate } from "@/assets/utils/helpers";
+
 import {
 
   ChevronDown,
@@ -6,19 +6,21 @@ import {
 
 } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import { OrderCancelAlert } from "../genericUIcomponents/Alerts/OrderCancelAlert";
-import AdminDineInCard from "./AdminDineInCard";
+import { DeclineRequestAlert} from "../genericUIcomponents/Alerts/DeclineRequestAlert";
+import AdminDineInDetailsCard from "./AdminDineInDetailsCard";
 
 interface AdminReservationsCard {
   data: any;
   open: string | null;
   setOpen: Dispatch<SetStateAction<string | null>>;
+  onStatusUpdated: (id: string) => void;
 }
 
 const AdminReservationsCard = ({
   data,
   open,
   setOpen,
+   onStatusUpdated
 }: AdminReservationsCard) => {
   const [decline, setDecline] = useState<boolean>(false);
   console.log("reservation data on card : ",data)
@@ -63,7 +65,7 @@ const AdminReservationsCard = ({
             )}
           </button>
           {open === data._id && (
-            <AdminDineInCard data = {data}/>
+            <AdminDineInDetailsCard data = {data}/>
           )}
         </section>
 
@@ -83,7 +85,7 @@ const AdminReservationsCard = ({
           </button>
         </div>
       </div>
-      <OrderCancelAlert open={decline} setOpen={setDecline} />
+      <DeclineRequestAlert open={decline} setOpen={setDecline} id = {data._id}/>
     </>
   );
 };

@@ -13,11 +13,12 @@ import {
 } from "lucide-react";
 import { carouselScroll } from "@/assets/utils/helpers";
 import useGetUserAddresses from "@/hooks/use-getUserAddresses";
+import { useEffect, useState } from "react";
 
 
 const Cart = () => {
   const navigate = useNavigate();
-
+ 
   const {
     addressData,
     loading: addressLoading,
@@ -27,6 +28,17 @@ const Cart = () => {
   const { items, total, restaurantId } = useSelector(
     (state: RootState) => state.cart,
   );
+  const [addressSelect, setAddressSelect] = useState<string>("")
+  useEffect(()=>{
+    if(addressData?.length){
+      setAddressSelect((curr)=>{
+        if(curr && addressData.some((item:any)=>item.id === curr)){
+          return curr
+        }
+        return addressData.find((item)=>item.isDefault)?._id ?? ""
+      })
+    }
+  }, [addressData])
 
   const deliveryFee = total > 1000 ? 10 : 35;
   const gst = Math.ceil(total * 0.05);
@@ -211,6 +223,8 @@ const Cart = () => {
                           <AddressCard
                             key={item._id}
                             data={item}
+                            select = {addressSelect}
+                            setSelect={setAddressSelect}
                           />
                         ))}
 

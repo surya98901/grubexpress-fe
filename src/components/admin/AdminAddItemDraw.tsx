@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { cusines, categories, foodTypes } from "@/assets/utils/constants";
 import { Check, IndianRupee, Plus, Users} from "lucide-react";
-import useAddItemsToMenu from "@/hooks/use-addItemstoMenu";
+import useAddItemsToMenu from "@/hooks/AdminHooks/use-addItemstoMenu";
 import { toast } from "sonner";
 
 type AdminAddItemDrawProps = {
