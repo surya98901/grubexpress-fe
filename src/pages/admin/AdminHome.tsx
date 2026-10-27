@@ -7,21 +7,20 @@ import RestaurantHeroBanner from "@/components/restaurant/RestaurantHeroBanner";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Plus, Store, UtensilsCrossed } from "lucide-react";
 import AddRestaurantAlert from "@/components/genericUIcomponents/Alerts/AddRestaurantAlert";
-
+import GlobalShimmer from "@/components/GlobalShimmer";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [restaurantData, setRestaurantData] = useState<Restaurant[] | null>(
-    null,
-  );
+
+  const [restaurantData, setRestaurantData] = useState<Restaurant[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAdminRestaurents = async () => {
       try {
         const response = await getAdminRestaurents();
-        setRestaurantData(response.data.data);
+        setRestaurantData(response.data.data ?? []);
       } catch (err) {
         console.error("Error fetching admin restaurants:", err);
         setRestaurantData([]);
@@ -40,20 +39,7 @@ const AdminHome = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] bg-stone-50 p-6 md:p-10">
-        <div className="mx-auto max-w-7xl animate-pulse space-y-8">
-          <div className="h-8 w-64 rounded-lg bg-stone-200" />
-          <div className="h-4 w-80 max-w-full rounded bg-stone-200" />
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {[1, 2, 3].map((item) => (
-              <div
-                key={item}
-                className="h-64 rounded-2xl border border-stone-200 bg-white"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <GlobalShimmer />
     );
   }
 
@@ -66,9 +52,11 @@ const AdminHome = () => {
               <Store size={14} />
               RESTAURANT MANAGEMENT
             </div>
+
             <h1 className="text-3xl font-bold tracking-tight text-stone-900 md:text-5xl">
               Your restaurants<span className="text-orange-600">.</span>
             </h1>
+
             <p className="mt-3 max-w-xl text-sm leading-6 text-stone-500 md:text-base">
               Everything starts with a great kitchen. Select a restaurant to
               manage its menu, orders, and operations.
@@ -79,6 +67,7 @@ const AdminHome = () => {
             <div className="flex size-11 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
               <UtensilsCrossed size={21} />
             </div>
+
             <div>
               <p className="text-2xl font-bold leading-none text-stone-900">
                 {restaurantData?.length ?? 0}
@@ -96,6 +85,7 @@ const AdminHome = () => {
               <h2 className="text-lg font-semibold text-stone-800">
                 Select a restaurant
               </h2>
+
               <p className="text-sm text-stone-400">
                 {restaurantData.length}{" "}
                 {restaurantData.length === 1 ? "location" : "locations"}
@@ -110,9 +100,9 @@ const AdminHome = () => {
                   onClick={() => handleRestaurantSelection(restaurant._id)}
                   className="group relative min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-orange-300 hover:shadow-xl hover:shadow-orange-950/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
                 >
-                  <div className="overflow-hidden rounded-xl h-[60vh]">
+                  <div className="h-[60vh] overflow-hidden rounded-xl">
                     <h2 className="my-2 px-2 text-xl font-bold">
-                      {restaurant.Name}-{restaurant.address.city}
+                      {restaurant.Name} - {restaurant.address.city}
                     </h2>
                     <RestaurantHeroBanner data={restaurant} />
                   </div>
@@ -137,7 +127,7 @@ const AdminHome = () => {
                 </button>
               ))}
 
-             <AddRestaurantAlert />
+              <AddRestaurantAlert />
             </div>
           </section>
         ) : (
