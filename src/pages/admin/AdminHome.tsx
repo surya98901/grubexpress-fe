@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import type { Restaurant } from "@/types/restaurant";
 import { getAdminRestaurents } from "@/services/adminApis";
-import { useDispatch } from "react-redux";
-import { setRestaurant } from "@/store/slices/userSlice";
 import RestaurantHeroBanner from "@/components/restaurant/RestaurantHeroBanner";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Plus, Store, UtensilsCrossed } from "lucide-react";
 import AddRestaurantAlert from "@/components/genericUIcomponents/Alerts/AddRestaurantAlert";
 import GlobalShimmer from "@/components/GlobalShimmer";
+import AdminRestaurantCard from "@/components/admin/AdminRestaurantCard";
+
 
 const AdminHome = () => {
-  const dispatch = useDispatch();
+ 
   const navigate = useNavigate();
 
   const [restaurantData, setRestaurantData] = useState<Restaurant[] | null>(null);
@@ -31,12 +31,7 @@ const AdminHome = () => {
 
     fetchAdminRestaurents();
   }, []);
-
-  const handleRestaurantSelection = (restaurantId: string) => {
-    dispatch(setRestaurant(restaurantId));
-    navigate("/admin/dashboard");
-  };
-
+    
   if (loading) {
     return (
       <GlobalShimmer />
@@ -94,37 +89,7 @@ const AdminHome = () => {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {restaurantData.map((restaurant) => (
-                <button
-                  type="button"
-                  key={restaurant._id}
-                  onClick={() => handleRestaurantSelection(restaurant._id)}
-                  className="group relative min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-orange-300 hover:shadow-xl hover:shadow-orange-950/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-                >
-                  <div className="h-[60vh] overflow-hidden rounded-xl">
-                    <h2 className="my-2 px-2 text-xl font-bold">
-                      {restaurant.Name} - {restaurant.address.city}
-                    </h2>
-                    <RestaurantHeroBanner data={restaurant} />
-                  </div>
-
-                  <div className="flex items-center justify-between gap-3 px-3 py-4">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-stone-800">
-                        Manage restaurant
-                      </p>
-                      <p className="mt-1 text-xs text-stone-500">
-                        Open your dashboard
-                      </p>
-                    </div>
-
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600 transition-all duration-300 group-hover:bg-orange-600 group-hover:text-white">
-                      <ArrowRight
-                        size={18}
-                        className="transition-transform duration-300 group-hover:translate-x-0.5"
-                      />
-                    </span>
-                  </div>
-                </button>
+                <AdminRestaurantCard data = {restaurant} />
               ))}
 
               <AddRestaurantAlert />
