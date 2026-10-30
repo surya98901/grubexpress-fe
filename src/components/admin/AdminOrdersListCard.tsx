@@ -18,7 +18,7 @@ const AdminOrdersListCard = ({ data, open, setOpen ,onStatusUpdated}: AdminOrder
   const displayedItems = data?.items ?? [];
   const restaurantId = useSelector((state:RootState)=>state.user.RestaurantId)
   const [decline, setDecline] = useState<boolean>(false)
-const { editOrder, loading, error } = useEditAdminOrder(
+const { editOrder, loading } = useEditAdminOrder(
   restaurantId,
   data._id,
 );

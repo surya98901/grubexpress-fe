@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 const useGetAdminOrders = (id: string | null) => {
   const [orderData, setOrderData] = useState<OrderDetails[] | null>(null);
-  const [orderLoading, setLoading] = useState(false);
-  const [orderError, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const fetchData = async () => {
      if (!id) {
       setOrderData([]);
@@ -33,8 +33,8 @@ const useGetAdminOrders = (id: string | null) => {
   }, [id]);
   return {
     orderData,
-    orderLoading,
-    orderError,
+    loading,
+    error,
     refetch : fetchData,
   };
 };

@@ -62,7 +62,7 @@ export const AddAddressCard = () => {
     </div>
   );
 };
-export const AddressDisplyTile = ({ data, loading }: AddressCardtype) => {
+export const AddressDisplyTile = ({ data, loading }: {data:Address, loading : boolean}) => {
   return (
     <div className="min-w-0">
       <p className="text-xl font-bold tracking-tighter">

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Restaurant } from "@/types/restaurant";
 import { getAdminRestaurents } from "@/services/adminApis";
-import RestaurantHeroBanner from "@/components/restaurant/RestaurantHeroBanner";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Plus, Store, UtensilsCrossed } from "lucide-react";
+import {  Plus, Store, UtensilsCrossed } from "lucide-react";
 import AddRestaurantAlert from "@/components/genericUIcomponents/Alerts/AddRestaurantAlert";
 import GlobalShimmer from "@/components/GlobalShimmer";
 import AdminRestaurantCard from "@/components/admin/AdminRestaurantCard";

@@ -23,7 +23,7 @@ export const DeclineRequestAlert = ({
    id:string
 }) => {
   const restaurantId = useSelector((state:RootState)=>state.user.RestaurantId)
-  const { editOrder, loading, error } = useEditAdminOrder(
+  const { editOrder } = useEditAdminOrder(
   restaurantId,
   id,
 );

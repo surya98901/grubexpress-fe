@@ -6,10 +6,12 @@ import { ArrowUpRight, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {  AddressCard } from "../AddressCard";
 import AddressAlert from "@/components/genericUIcomponents/Alerts/AddressAlert";
+import { useState } from "react";
 
 const ProfileDetails = ({ active }: { active: string }) => {
   const activeOption = profileOptions.find((item) => item.label === active);
   const { orders, loading, error } = useGetOrders();
+  const [defaultAdd, setDefault] = useState<string>("")
   const {
     addressData,
     loading: addressLoading,
@@ -62,7 +64,7 @@ const ProfileDetails = ({ active }: { active: string }) => {
           <div className="px-5 flex flex-col">
             <div className="flex min-h-[280px] flex gap-4 overflow-x-auto">
               {addressData?.map((item) => (
-                <AddressCard key={item._id} data={item} />
+                <AddressCard key={item._id} data={item} select = {defaultAdd} setSelect = {setDefault} />
               ))}
             </div>
             <AddressAlert />

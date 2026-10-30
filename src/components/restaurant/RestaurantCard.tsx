@@ -15,6 +15,7 @@ const RestaurantCard = ({ data }: { data: any }) => {
   const serviceType = useSelector(
     (state: RootState) => state.service.serviceType,
   );
+  console.log(data)
   return serviceType === "dine-out" ? diningCard(data) : deliveryCard(data);
 };
 const deliveryCard = (data: any) => {

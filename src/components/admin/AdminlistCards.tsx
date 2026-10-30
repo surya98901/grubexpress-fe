@@ -1,7 +1,6 @@
 import { formatDate } from "@/assets/utils/helpers";
 
 const AdminlistCard = ({ list }: { list: any }) => {
-  console.log(list);
   return (
     <div className="group flex w-full items-center gap-4 rounded-2xl bg-white p-4 text-gray-900 shadow-sm transition-all duration-300  hover:shadow-md">
       <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-gray-100 ring-1 ring-black/5">

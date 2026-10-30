@@ -20,7 +20,6 @@ const AdminReservationsCard = ({
   data,
   open,
   setOpen,
-   onStatusUpdated
 }: AdminReservationsCard) => {
   const [decline, setDecline] = useState<boolean>(false);
   console.log("reservation data on card : ",data)

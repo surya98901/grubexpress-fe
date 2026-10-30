@@ -24,7 +24,7 @@ const AdminServiceUpdates = () => {
   const isOrders = selectService === "orders";
   const statusList = isOrders ? orderStatuses : dineInStatuses;
 
-  const { orderData, orderLoading } = useGetAdminOrders(
+  const { orderData, loading } = useGetAdminOrders(
     isOrders ? restaurantId : null,
   );
 
@@ -32,7 +32,7 @@ const AdminServiceUpdates = () => {
     isOrders ? null : restaurantId,
   );
 
-  const loading = isOrders ? orderLoading : reservationLoading;
+  const loadingz = isOrders ? loading : reservationLoading;
 
   const visibleOrders = (orderData ?? []).filter(
     (order) =>
@@ -183,11 +183,11 @@ const AdminServiceUpdates = () => {
         </div>
 
         <div className="mt-2 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1">
-          {loading ? (
+          {loadingz ? (
             <div className="flex flex-col items-center justify-center gap-3 py-12">
               <RotateCw className="h-5 w-5 animate-spin text-gray-400" />
               <p className="text-sm text-gray-500">
-                Loading {isOrders ? "orders" : "reservations"}...
+                Loadingz {isOrders ? "orders" : "reservations"}...
               </p>
             </div>
           ) : isOrders ? (
