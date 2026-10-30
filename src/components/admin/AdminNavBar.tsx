@@ -52,7 +52,7 @@ const AdminNavBar = () => {
     <div className="navbar flex justify-between items-center p-4 bg-green-700 text-white px-4">
       <section className="flex items-center justify-between w-[20vw] mx-10 ">
         <Link to="/admin/home" className="text-xl font-bold">
-          <img src="/Grub Express Cartoon Train.png" alt="" className="w-[200px]"/>
+          <h1 className="text-white font-bold text-xl">GRUB EXPRESS.</h1>
         </Link>
         <span> Welcome, {userName}</span>
       </section>

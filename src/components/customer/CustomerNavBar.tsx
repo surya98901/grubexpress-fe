@@ -18,7 +18,7 @@ const CustomerNavBar = () => {
   return (
     <div className="navbar flex justify-between items-center p-4 bg-green-700 text-white px-50">
 
-        <img src="/Grub Express Cartoon Train.png" alt="" className="w-[200px]"/>
+        <h1 className="text-white font-bold text-xl">GRUB EXPRESS.</h1>
 
       <nav className="flex ">
         {!userName ? (

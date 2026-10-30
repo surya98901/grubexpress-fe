@@ -9,18 +9,17 @@ import RestaurantHeroBanner from "@/components/restaurant/RestaurantHeroBanner";
 import OfferContainer from "@/components/offers/OffersContainer";
 import RestaurntContainerSlide from "@/components/restaurant/RestaurantContainerSlide";
 import type { RootState } from "@/store/store";
-
+import CartAlert from "@/components/customer/CartAlert";
 
 const RestaurantPage = () => {
-
   const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);
-   const serviceType = useSelector(
+  const serviceType = useSelector(
     (state: RootState) => state.service.serviceType,
   );
   const { id } = useParams();
 
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
     const fetchRestaurantData = async () => {
       try {
         const restaurantResponse = await getRestaurant(id);
@@ -32,11 +31,13 @@ const RestaurantPage = () => {
 
     fetchRestaurantData();
   }, [id]);
-  return serviceType === "food-delivery" ? foodDel(restaurantData) : dining(restaurantData)
+  return serviceType === "food-delivery"
+    ? foodDel(restaurantData)
+    : dining(restaurantData);
 };
-const dining = (restaurantData : any)=>{
-    return (
-        <div className="mx-auto flex  w-[60vw]  flex-col gap-10 px-4 py-8">
+const dining = (restaurantData: any) => {
+  return (
+    <div className="mx-auto flex  w-[60vw]  flex-col gap-10 px-4 py-8">
       <div className="flex gap-2 text-sm">
         <span className="text-gray-500">Home</span>
         <span className="text-gray-500">{restaurantData?.address?.city}</span>
@@ -57,8 +58,7 @@ const dining = (restaurantData : any)=>{
 
       <section className="border-t pt-8">
         <h2 className="mb-5 text-2xl font-bold">You may also like</h2>
-        < RestaurntContainerSlide />
-
+        <RestaurntContainerSlide />
       </section>
 
       <section className="border-t pt-8">
@@ -127,11 +127,13 @@ const dining = (restaurantData : any)=>{
         </p>
       </section>
     </div>
-    )
-}
-const foodDel = (restaurantData : any)=>{
-    return (
-    <div className="mx-auto flex  w-[60vw] flex-col gap-10 px-4 py-8">
+  );
+};
+const foodDel = (restaurantData: any) => {
+  const cart = useSelector((state:RootState)=> state.cart.items)
+  return (
+    <>
+    <div className="mx-auto relative flex  w-[60vw] flex-col gap-10 px-4 py-8">
       <div className="flex gap-2 text-sm">
         <span className="text-gray-500">Home</span>
         <span>/</span>
@@ -155,8 +157,7 @@ const foodDel = (restaurantData : any)=>{
 
       <section className="border-t pt-8">
         <h2 className="mb-5 text-2xl font-bold">You may also like</h2>
-        < RestaurntContainerSlide />
-
+        <RestaurntContainerSlide />
       </section>
 
       <section className="border-t pt-8">
@@ -225,6 +226,8 @@ const foodDel = (restaurantData : any)=>{
         </p>
       </section>
     </div>
+    {cart?.length > 0 && <CartAlert />}
+    </>
   );
-}
+};
 export default RestaurantPage;
